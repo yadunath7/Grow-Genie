@@ -1,0 +1,549 @@
+<?php
+session_start();
+include 'api/db.php';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoices | GrowGenie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Include jsPDF -->
+    <!-- Include html2pdf.js for better multilingual PDF support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-white min-h-screen flex">
+
+    <div id="sidebar-container"></div>
+
+    <main class="flex-1 ml-64 p-8 md:p-12 min-h-screen relative">
+        <header class="flex justify-between items-center mb-12">
+            <div>
+                <h2 class="text-5xl font-black mb-2 uppercase tracking-tight" data-i18n="invoices">Invoice Generator</h2>
+                <p class="text-xl text-gray-600 font-medium italic" data-i18n="invoice_gen_desc">GST-compliant PDF invoices for your business.</p>
+            </div>
+            <button onclick="openInvoiceModal()" class="btn-positivus bg-lime-green px-8 py-4 text-xl flex items-center space-x-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
+                <span data-i18n="new_invoice">New Invoice</span>
+            </button>
+        </header>
+
+        <!-- Summary Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="card-positivus bg-white flex flex-col justify-center py-8">
+                <p class="text-gray-500 font-black uppercase text-sm mb-1" data-i18n="total_invoices_stat">Total Invoices</p>
+                <p id="stat-total" class="text-4xl font-black">0</p>
+            </div>
+            <div class="card-positivus bg-white border-lime-green flex flex-col justify-center py-8">
+                <p class="text-gray-500 font-black uppercase text-sm mb-1" data-i18n="paid_amount">Paid Amount</p>
+                <p id="stat-paid" class="text-4xl font-bold text-lime-green">₹0</p>
+            </div>
+            <div class="card-positivus bg-white border-red-500 flex flex-col justify-center py-8">
+                <p class="text-gray-500 font-black uppercase text-sm mb-1" data-i18n="pending_amount">Pending Amount</p>
+                <p id="stat-pending" class="text-4xl font-black text-red-500">₹0</p>
+            </div>
+        </div>
+
+        <!-- Business Profile Section -->
+        <div class="card-positivus bg-white mb-12">
+            <div class="flex justify-between items-center mb-8 border-b-2 border-dark-black/10 pb-4">
+                <h3 class="text-3xl font-black uppercase tracking-tight" data-i18n="business_profile">Business Profile</h3>
+                <span class="text-sm font-bold text-gray-500 italic" data-i18n="profile_setup_desc">One-time setup for all your invoices</span>
+            </div>
+            
+            <form id="profile-form" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Left: Branding -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Company Logo</label>
+                        <div class="relative group">
+                            <input type="file" id="profile_logo" class="hidden" accept="image/*" onchange="previewImage(this, 'logo-preview')">
+                            <label for="profile_logo" class="cursor-pointer block w-full h-32 border-2 border-dashed border-dark-black rounded-3xl flex items-center justify-center bg-light-gray hover:bg-lime-green/10 transition overflow-hidden">
+                                <img id="logo-preview" class="h-full w-full object-contain hidden">
+                                <div id="logo-placeholder" class="text-center">
+                                    <span class="text-3xl">🖼️</span>
+                                    <p class="text-xs font-bold mt-1">Upload Logo</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">E-Signature / Stamp</label>
+                        <div class="relative group">
+                            <input type="file" id="profile_stamp" class="hidden" accept="image/*" onchange="previewImage(this, 'stamp-preview')">
+                            <label for="profile_stamp" class="cursor-pointer block w-full h-32 border-2 border-dashed border-dark-black rounded-3xl flex items-center justify-center bg-light-gray hover:bg-lime-green/10 transition overflow-hidden">
+                                <img id="stamp-preview" class="h-full w-full object-contain hidden">
+                                <div id="stamp-placeholder" class="text-center">
+                                    <span class="text-3xl">✍️</span>
+                                    <p class="text-xs font-bold mt-1">Upload Stamp</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Details -->
+                <div class="md:col-span-2 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2" data-i18n="company_name">Company Name</label>
+                            <input type="text" id="prof_company_name" class="input-positivus w-full" placeholder="GrowGenie Pvt Ltd">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2">Contact Details</label>
+                            <input type="text" id="prof_contact" class="input-positivus w-full" placeholder="+91 98765 43210, hi@growgenie.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Business Address</label>
+                        <textarea id="prof_address" rows="3" class="input-positivus w-full" placeholder="123 Startup Hub, Bengaluru, India"></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" id="save-profile-btn" class="btn-positivus bg-dark-black text-white px-10 py-3 text-lg hover:bg-lime-green hover:text-dark-black">
+                            <span data-i18n="save_profile">Save Business Profile</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- History Section -->
+        <div class="card-positivus bg-light-gray min-h-[500px] flex flex-col">
+            <div class="flex justify-between items-center mb-10 border-b-2 border-dark-black/10 pb-6">
+                <h3 class="text-3xl font-black uppercase tracking-tight" data-i18n="recent_invoices">Recent Invoices</h3>
+                <div class="flex space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-lime-green border border-dark-black"></span>
+                    <span class="w-3 h-3 rounded-full bg-white border border-dark-black"></span>
+                    <span class="w-3 h-3 rounded-full bg-dark-black border border-dark-black"></span>
+                </div>
+            </div>
+            
+            <div id="invoice-history" class="space-y-6">
+                <!-- Empty State -->
+                <div id="empty-state" class="flex flex-col items-center justify-center py-20 text-center">
+                    <div class="w-24 h-24 bg-white border-4 border-dark-black rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-[8px_8px_0_#191a23]">🧾</div>
+                    <h4 class="text-2xl font-black uppercase" data-i18n="no_invoices">No invoices yet</h4>
+                    <p class="text-gray-500 font-medium mt-2" data-i18n="no_invoices_desc">Click 'New Invoice' to generate your first GST invoice.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Invoice Modal -->
+        <div id="invoice-modal" class="fixed inset-0 bg-dark-black/80 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
+            <div class="card-positivus bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto relative animate-in fade-in zoom-in duration-200">
+                <button onclick="closeInvoiceModal()" class="absolute top-6 right-6 text-dark-black hover:rotate-90 transition-transform">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+                <h3 class="text-3xl font-black mb-8 uppercase tracking-tight">Generate New Invoice</h3>
+                
+                <form id="invoice-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2">Customer Name *</label>
+                            <input type="text" id="client_name" required class="input-positivus w-full" placeholder="Ramesh Kumar">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2">Customer Email</label>
+                            <input type="email" id="recipient_email" required class="input-positivus w-full" placeholder="customer@email.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Product / Service</label>
+                        <input type="text" id="product" required class="input-positivus w-full" placeholder="E.g. Consultation, Web Design">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2">Base Price (₹)</label>
+                            <input type="number" id="amount" required class="input-positivus w-full" placeholder="0.00" oninput="calculateGST()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2">GST Number (Optional)</label>
+                            <input type="text" id="gst_number" class="input-positivus w-full" placeholder="GSTIN-12345">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2">Date</label>
+                            <input type="date" id="date" required class="input-positivus w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black uppercase mb-2">Payment Status</label>
+                            <select id="status" required class="input-positivus w-full appearance-none bg-white">
+                                <option value="pending">Pending ⏳</option>
+                                <option value="paid">Paid ✅</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- GST Summary Box -->
+                    <div class="bg-light-gray p-6 rounded-3xl border-2 border-dark-black space-y-3">
+                        <div class="flex justify-between font-bold">
+                            <span>Subtotal</span>
+                            <span id="calc-subtotal">₹0.00</span>
+                        </div>
+                        <div class="flex justify-between font-bold text-gray-500">
+                            <span>GST (18%)</span>
+                            <span id="calc-gst" class="text-orange-500">₹0.00</span>
+                        </div>
+                        <div class="h-[2px] bg-dark-black/10 my-2"></div>
+                        <div class="flex justify-between text-2xl font-black">
+                            <span>Total Payable</span>
+                            <span id="calc-total">₹0.00</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Output Language</label>
+                        <select id="output_lang" required class="input-positivus w-full appearance-none bg-white">
+                            <option value="en">English 🇺🇸</option>
+                            <option value="hi">Hindi (हिन्दी) 🇮🇳</option>
+                            <option value="ta">Tamil (தமிழ்) 🇮🇳</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-4 pt-4">
+                        <button type="submit" id="generate-btn" class="flex-1 btn-positivus bg-lime-green text-xl py-5">
+                            Generate PDF Invoice 📄
+                        </button>
+                        <button type="button" onclick="closeInvoiceModal()" class="px-8 py-5 border-2 border-dark-black rounded-3xl font-black uppercase hover:bg-red-50 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/app.js"></script>
+    <script>
+        function openInvoiceModal() {
+            document.getElementById('invoice-modal').classList.remove('hidden');
+            document.getElementById('invoice-modal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeInvoiceModal() {
+            document.getElementById('invoice-modal').classList.add('hidden');
+            document.getElementById('invoice-modal').classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById(previewId);
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    document.getElementById(previewId.replace('preview', 'placeholder')).classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        let businessProfile = null;
+
+        async function fetchBusinessProfile() {
+            try {
+                const res = await fetch(`${API_BASE}/business_profile.php?action=fetch`);
+                const data = await res.json();
+                if (data.status === 'success' && data.data) {
+                    businessProfile = data.data;
+                    document.getElementById('prof_company_name').value = businessProfile.company_name || '';
+                    document.getElementById('prof_contact').value = businessProfile.contact_details || '';
+                    document.getElementById('prof_address').value = businessProfile.address || '';
+                    
+                    if (businessProfile.logo_path) {
+                        const preview = document.getElementById('logo-preview');
+                        preview.src = businessProfile.logo_path;
+                        preview.classList.remove('hidden');
+                        document.getElementById('logo-placeholder').classList.add('hidden');
+                    }
+                    if (businessProfile.stamp_path) {
+                        const preview = document.getElementById('stamp-preview');
+                        preview.src = businessProfile.stamp_path;
+                        preview.classList.remove('hidden');
+                        document.getElementById('stamp-placeholder').classList.add('hidden');
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to fetch business profile", e);
+            }
+        }
+
+        function calculateGST() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const gst = amount * 0.18;
+            const total = amount + gst;
+
+            document.getElementById('calc-subtotal').textContent = `₹${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+            document.getElementById('calc-gst').textContent = `₹${gst.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+            document.getElementById('calc-total').textContent = `₹${total.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+        }
+        async function updateInvoiceStatus(id, newStatus) {
+            const formData = new URLSearchParams();
+            formData.append('action', 'update_status');
+            formData.append('invoice_id', id);
+            formData.append('status', newStatus);
+
+            try {
+                const res = await fetch(`${API_BASE}/invoices.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    fetchInvoices(); // Refresh the list and stats
+                }
+            } catch (e) {
+                console.error("Failed to update status", e);
+            }
+        }
+
+        let fetchInvoices; // Global reference for status toggling
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            renderSidebar('invoices');
+            const user = await checkAuth();
+            if(!user) return;
+
+            fetchBusinessProfile();
+
+            document.getElementById('date').valueAsDate = new Date();
+
+            if(user.subscription_status === 'expired') return;
+
+            // Business Profile Form Submit
+            document.getElementById('profile-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('save-profile-btn');
+                btn.disabled = true;
+                btn.textContent = "Saving...";
+
+                const formData = new FormData();
+                formData.append('action', 'save');
+                formData.append('company_name', document.getElementById('prof_company_name').value);
+                formData.append('contact_details', document.getElementById('prof_contact').value);
+                formData.append('address', document.getElementById('prof_address').value);
+                
+                if (document.getElementById('profile_logo').files[0]) {
+                    formData.append('logo', document.getElementById('profile_logo').files[0]);
+                }
+                if (document.getElementById('profile_stamp').files[0]) {
+                    formData.append('stamp', document.getElementById('profile_stamp').files[0]);
+                }
+                if (businessProfile) {
+                    formData.append('existing_logo', businessProfile.logo_path || '');
+                    formData.append('existing_stamp', businessProfile.stamp_path || '');
+                }
+
+                try {
+                    const res = await fetch(`${API_BASE}/business_profile.php`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (data.status === 'success') {
+                        alert("Business Profile Saved!");
+                        fetchBusinessProfile();
+                    }
+                } catch (e) {
+                    alert("Failed to save profile.");
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = "Save Business Profile";
+                }
+            });
+
+            fetchInvoices = async function() {
+                try {
+                    const res = await fetch(`${API_BASE}/invoices.php?action=fetch`);
+                    const data = await res.json();
+                    const historyContainer = document.getElementById('invoice-history');
+                    
+                    if (data.status === 'success') {
+                        let total = 0;
+                        let paid = 0;
+                        let pending = 0;
+
+                        if (data.data.length === 0) {
+                            historyContainer.innerHTML = `
+                                <div id="empty-state" class="flex flex-col items-center justify-center py-20 text-center w-full">
+                                    <div class="w-24 h-24 bg-white border-4 border-dark-black rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-[8px_8px_0_#191a23]">🧾</div>
+                                    <h4 class="text-2xl font-black uppercase">No invoices yet</h4>
+                                    <p class="text-gray-500 font-medium mt-2">Click 'New Invoice' to generate your first GST invoice.</p>
+                                </div>
+                            `;
+                        } else {
+                            historyContainer.innerHTML = data.data.map(inv => {
+                                const amt = parseFloat(inv.amount);
+                                total += amt;
+                                if (inv.status === 'paid') paid += amt;
+                                else pending += amt;
+
+                                return `
+                                    <div class="p-8 bg-white border-2 border-dark-black rounded-[35px] flex justify-between items-center hover:shadow-[6px_6px_0_#191a23] transition">
+                                        <div>
+                                            <div class="flex items-center gap-3 mb-1">
+                                                <h4 class="text-2xl font-bold text-dark-black">${inv.client_name}</h4>
+                                                <select onchange="updateInvoiceStatus(${inv.id}, this.value)" 
+                                                        class="px-3 py-1 rounded-full text-xs font-black uppercase border-2 border-dark-black cursor-pointer appearance-none ${inv.status === 'paid' ? 'bg-lime-green text-dark-black' : 'bg-red-100 text-red-600'}">
+                                                    <option value="pending" ${inv.status === 'pending' ? 'selected' : ''}>Pending ⏳</option>
+                                                    <option value="paid" ${inv.status === 'paid' ? 'selected' : ''}>Paid ✅</option>
+                                                </select>
+                                            </div>
+                                            <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">${new Date(inv.date).toLocaleDateString()}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="badge-lime text-xl font-bold px-4 py-1 rounded-lg border border-dark-black">₹${amt.toLocaleString('en-IN')}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        }
+
+                        // Update Stats
+                        document.getElementById('stat-total').textContent = data.data.length;
+                        document.getElementById('stat-paid').textContent = `₹${paid.toLocaleString('en-IN')}`;
+                        document.getElementById('stat-pending').textContent = `₹${pending.toLocaleString('en-IN')}`;
+                    }
+                } catch (e) {
+                    console.error("Failed to fetch invoices", e);
+                }
+            }
+
+            document.getElementById('invoice-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const client_name = document.getElementById('client_name').value;
+                const recipient_email = document.getElementById('recipient_email').value;
+                const product = document.getElementById('product').value;
+                const gst_number = document.getElementById('gst_number').value;
+                const amount = document.getElementById('amount').value;
+                const date = document.getElementById('date').value;
+                const status = document.getElementById('status').value;
+                const output_lang = document.getElementById('output_lang').value;
+                const btn = document.getElementById('generate-btn');
+
+                const invoiceLabels = {
+                    en: { title: "INVOICE", from: "FROM", billTo: "BILL TO", date: "DATE", invNum: "INVOICE #", desc: "DESCRIPTION", amount: "AMOUNT", total: "TOTAL", currency: "INR" },
+                    hi: { title: "चालान", from: "प्रेषक", billTo: "प्राप्तकर्ता", date: "दिनांक", invNum: "चालान संख्या", desc: "विवरण", amount: "राशि", total: "कुल योग", currency: "रुपये" },
+                    ta: { title: "இன்வாய்ஸ்", from: "அனுப்புநர்", billTo: "பெறுநர்", date: "தேதி", invNum: "இன்வாய்ஸ் எண்", desc: "விளக்கம்", amount: "தொகை", total: "மொத்தம்", currency: "ரூபாய்" }
+                };
+                const labels = invoiceLabels[output_lang] || invoiceLabels.en;
+
+                btn.disabled = true;
+                btn.textContent = "Generating...";
+
+                try {
+                    const template = document.createElement('div');
+                    template.style.padding = '40px';
+                    
+                    const compName = businessProfile?.company_name || 'GrowGenie Business';
+                    const compAddr = businessProfile?.address || 'Your Business Address';
+                    const compCont = businessProfile?.contact_details || 'Your Contact Details';
+                    const compLogo = businessProfile?.logo_path ? `<img src="${businessProfile.logo_path}" style="height: 60px; object-contain: contain;">` : `<div style="background: #b9ff66; padding: 15px 30px; border: 3px solid #191a23; border-radius: 20px; font-weight: 900;">GrowGenie</div>`;
+                    const compStamp = businessProfile?.stamp_path ? `<div style="margin-top: 20px; text-align: right;"><img src="${businessProfile.stamp_path}" style="height: 80px; object-fit: contain;"><p style="font-size: 12px; font-weight: bold; margin-top: 5px;">AUTHORIZED SIGNATORY</p></div>` : '';
+
+                    template.innerHTML = `
+                        <div style="border: 4px solid #191a23; padding: 40px; border-radius: 40px; background: white; color: #191a23; font-family: sans-serif;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px;">
+                                <h1 style="font-size: 60px; font-weight: 900; margin: 0;">${labels.title}</h1>
+                                ${compLogo}
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 60px;">
+                                <div style="max-width: 45%;">
+                                    <p style="text-transform: uppercase; font-size: 14px; font-weight: 900; color: #666; margin-bottom: 5px;">${labels.from}</p>
+                                    <p style="font-size: 20px; font-weight: 900; margin: 0;">${compName}</p>
+                                    <p style="font-size: 14px; color: #444; margin: 5px 0;">${compAddr}</p>
+                                    <p style="font-size: 14px; color: #444; margin: 0;">${compCont}</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <p style="text-transform: uppercase; font-size: 14px; font-weight: 900; color: #666; margin-bottom: 5px;">${labels.billTo}</p>
+                                    <p style="font-size: 20px; font-weight: 700; margin: 0;">${client_name}</p>
+                                    <p style="font-size: 14px;">${recipient_email}</p>
+                                    ${gst_number ? `<p style="font-size: 14px;">GST: ${gst_number}</p>` : ''}
+                                </div>
+                            </div>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr style="background: #191a23; color: #b9ff66;">
+                                    <th style="padding: 20px; text-align: left; border-radius: 20px 0 0 20px;">${labels.desc}</th>
+                                    <th style="padding: 20px; text-align: right; border-radius: 0 20px 20px 0;">${labels.amount}</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 30px 20px; border-bottom: 2px solid #eee; font-weight: 600;">${product}</td>
+                                    <td style="padding: 30px 20px; border-bottom: 2px solid #eee; text-align: right; font-weight: 900;">₹${parseFloat(amount).toLocaleString('en-IN')}</td>
+                                </tr>
+                            </table>
+                            <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+                                <div style="font-size: 12px; color: #888;">
+                                    <p>Invoice Date: ${date}</p>
+                                    <p>Generated via GrowGenie Business Builder</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="background: #f3f3f3; padding: 20px 40px; border-radius: 30px; border: 2px solid #191a23; margin-bottom: 20px;">
+                                        <p style="font-size: 14px; font-weight: 900; color: #666; margin: 0;">TOTAL PAYABLE</p>
+                                        <p style="font-size: 36px; font-weight: 900; margin: 0;">₹${(parseFloat(amount) * 1.18).toLocaleString('en-IN', {maximumFractionDigits: 2})}</p>
+                                        <p style="font-size: 12px; color: #888; margin: 0;">Includes 18% GST</p>
+                                    </div>
+                                    ${compStamp}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    const baseAmount = parseFloat(amount);
+                    const totalWithGST = baseAmount * 1.18;
+
+                    await html2pdf().set({ 
+                        margin: 10, 
+                        filename: `Invoice_${client_name.replace(/\s+/g, '_')}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    }).from(template).save();
+
+                    const formData = new URLSearchParams();
+                    formData.append('action', 'save');
+                    formData.append('client_name', client_name);
+                    formData.append('recipient_email', recipient_email);
+                    formData.append('gst_number', gst_number);
+                    formData.append('amount', totalWithGST); // Save total including GST
+                    formData.append('date', date);
+                    formData.append('status', status);
+
+                    const res = await fetch(`${API_BASE}/invoices.php`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData
+                    });
+                    const data = await res.json();
+
+                    if(data.status === 'success') {
+                        closeInvoiceModal();
+                        document.getElementById('invoice-form').reset();
+                        fetchInvoices();
+                    } else {
+                        alert("Backend Error: " + data.message);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Error: " + err.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = "Generate PDF Invoice 📄";
+                }
+            });
+            fetchInvoices();
+        });
+    </script>
+</body>
+</html>

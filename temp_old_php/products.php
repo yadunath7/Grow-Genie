@@ -1,0 +1,245 @@
+<?php
+session_start();
+include 'api/db.php';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | GrowGenie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body class="bg-white text-dark-black min-h-screen flex">
+
+    <div id="sidebar-container"></div>
+
+    <main class="flex-1 ml-64 p-8 md:p-12 min-h-screen relative overflow-x-hidden transition-all duration-300">
+        <header class="flex justify-between items-center mb-12">
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="sidebar-toggle bg-white border-dark-black text-dark-black mr-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <div>
+                    <h2 class="text-5xl font-bold mb-2" data-i18n="marketplace">Marketplace</h2>
+                    <p class="text-xl text-gray-600 font-medium" data-i18n="marketplace_subtitle">Premium services to accelerate your startup</p>
+                </div>
+            </div>
+            <button onclick="toggleCart()" class="btn-positivus px-8 py-4 shadow-[8px_8px_0_#191a23] bg-lime-green relative">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                Cart (<span id="cart-count">0</span>)
+                <span class="hidden" data-i18n="cart_title">Cart</span>
+            </button>
+        </header>
+
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <!-- Services will be injected here -->
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-screen w-[450px] bg-white border-l-4 border-dark-black z-[110] transform translate-x-full transition-transform duration-500 shadow-[-20px_0_50px_rgba(0,0,0,0.1)] flex flex-col">
+        <div class="p-8 border-b-2 border-dark-black flex justify-between items-center">
+            <h3 class="text-3xl font-bold" data-i18n="your_cart">Your Cart</h3>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-dark-black transition">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-6">
+            <!-- Cart items here -->
+        </div>
+
+        <div class="p-8 border-t-4 border-dark-black bg-light-gray space-y-6">
+            <div class="flex justify-between items-center text-2xl font-bold">
+                <span data-i18n="total_amount">Total Amount</span>
+                <span id="cart-total">₹0</span>
+            </div>
+            <button onclick="proceedToPay()" class="btn-positivus w-full py-5 text-xl bg-lime-green shadow-[8px_8px_0_#191a23]" data-i18n="proceed_to_pay">Proceed to Pay</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-dark-black/80 backdrop-blur-md z-[150] hidden flex items-center justify-center p-4 text-center">
+        <div class="card-positivus bg-white p-12 max-w-lg">
+            <div class="w-24 h-24 bg-lime-green border-2 border-dark-black rounded-full flex items-center justify-center mx-auto mb-8 shadow-[6px_6px_0_#191a23]">
+                <svg class="w-12 h-12 text-dark-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-4xl font-bold mb-4">Payment Successful!</h3>
+            <p class="text-xl text-gray-600 mb-10">Your services have been activated and added to your dashboard.</p>
+            <button onclick="window.location.reload()" class="btn-positivus w-full py-4 text-lg">Go to Dashboard</button>
+        </div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+    <script>
+        const grid = document.getElementById('products-grid');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartItemsList = document.getElementById('cart-items');
+        const cartCount = document.getElementById('cart-count');
+        const cartTotal = document.getElementById('cart-total');
+        
+        let cart = JSON.parse(localStorage.getItem('gg_cart') || '[]');
+        let services = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            renderSidebar('products');
+            await checkAuth();
+            fetchServices();
+            updateCartUI();
+        });
+
+        async function fetchServices() {
+            try {
+                const res = await fetch(`${API_BASE}/products.php?action=fetch`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    services = data.data;
+                    renderGrid(data.data);
+                }
+            } catch (e) {
+                console.error("Fetch failed", e);
+            }
+        }
+
+        function renderGrid(data) {
+            grid.innerHTML = '';
+            data.forEach(s => {
+                const card = document.createElement('div');
+                card.className = "card-positivus flex flex-col justify-between h-full group hover:shadow-[12px_12px_0_#b9ff66]";
+                card.innerHTML = `
+                    <div>
+                        <div class="w-full h-48 bg-dark-black border-2 border-dark-black rounded-[2rem] mb-6 flex items-center justify-center text-6xl shadow-[4px_4px_0_#b9ff66] transition-transform group-hover:scale-105">
+                            ${getEmoji(s.name)}
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-2xl font-bold leading-tight">${s.name}</h4>
+                            <span class="badge-lime text-[10px] uppercase font-bold">${s.rate_type}</span>
+                        </div>
+                        <p class="text-dark-black font-bold text-3xl mb-4">₹${parseFloat(s.price).toLocaleString()}</p>
+                        <p class="text-gray-500 font-bold text-sm mb-2 uppercase tracking-wider">Duration: ${s.duration}</p>
+                        <p class="text-gray-600 font-medium mb-8 line-clamp-3">${s.description || 'No description provided.'}</p>
+                    </div>
+                    <button onclick="addToCart(${s.id})" class="btn-positivus w-full py-4 bg-lime-green text-dark-black hover:bg-dark-black hover:text-white transition shadow-[4px_4px_0_#191a23]">
+                        Add to Cart
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function getEmoji(name) {
+            const n = name.toLowerCase();
+            if (n.includes('consult')) return '🧠';
+            if (n.includes('road')) return '🗺️';
+            if (n.includes('market')) return '📣';
+            if (n.includes('invoice')) return '📄';
+            if (n.includes('pack')) return '📦';
+            return '🛠️';
+        }
+
+        function toggleCart() {
+            cartSidebar.classList.toggle('translate-x-full');
+        }
+
+        function addToCart(id) {
+            const service = services.find(s => s.id == id);
+            if (!service) return;
+            
+            if (cart.find(item => item.id == id)) {
+                alert("This service is already in your cart!");
+                return;
+            }
+
+            cart.push(service);
+            localStorage.setItem('gg_cart', JSON.stringify(cart));
+            updateCartUI();
+            toggleCart(); // Show cart after adding
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id != id);
+            localStorage.setItem('gg_cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            cartCount.textContent = cart.length;
+            cartItemsList.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                total += parseFloat(item.price);
+                const div = document.createElement('div');
+                div.className = "flex items-center space-x-4 p-4 border-2 border-dark-black rounded-2xl bg-white shadow-[4px_4px_0_#191a23]";
+                div.innerHTML = `
+                    <div class="w-16 h-16 bg-dark-black rounded-xl flex items-center justify-center text-2xl">${getEmoji(item.name)}</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-lg">${item.name}</h4>
+                        <p class="font-black text-lime-green">₹${parseFloat(item.price).toLocaleString()}</p>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                `;
+                cartItemsList.appendChild(div);
+            });
+
+            cartTotal.textContent = `₹${total.toLocaleString()}`;
+        }
+
+        function proceedToPay() {
+            if (cart.length === 0) return alert("Your cart is empty!");
+            
+            let total = 0;
+            const pIds = cart.map(item => item.id).join(',');
+            cart.forEach(item => total += parseFloat(item.price));
+
+            const rzp_key = "rzp_test_SjRPQ06Qae73n3";
+            const amountInPaise = total * 100;
+
+            const options = {
+                "key": rzp_key,
+                "amount": amountInPaise,
+                "currency": "INR",
+                "name": "GrowGenie Marketplace",
+                "description": `Purchase of ${cart.length} item(s)`,
+                "image": "assets/img/logo.png",
+                "handler": function (response) {
+                    // Send to backend for verification
+                    fetch('verify.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `razorpay_payment_id=${response.razorpay_payment_id}&type=product&amount=${total}&product_ids=${pIds}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            toggleCart();
+                            document.getElementById('success-modal').classList.remove('hidden');
+                            cart = [];
+                            localStorage.setItem('gg_cart', '[]');
+                            updateCartUI();
+                        } else {
+                            alert("Verification Failed: " + data.message);
+                        }
+                    })
+                    .catch(err => alert("System Error: " + err));
+                },
+                "prefill": {
+                    "name": document.querySelector('.user-name')?.textContent || "",
+                },
+                "theme": { "color": "#b9ff66" }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response){
+                alert("Payment Failed: " + response.error.description);
+            });
+            rzp.open();
+        }
+    </script>
+</body>
+</html>

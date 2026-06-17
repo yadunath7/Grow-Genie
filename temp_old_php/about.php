@@ -1,0 +1,234 @@
+<?php
+session_start();
+include 'api/db.php';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | GrowGenie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-white">
+
+    <nav class="sticky-nav py-6">
+        <div class="max-w-[85rem] mx-auto px-6 md:px-10 flex justify-between items-center w-full">
+            <a href="index.php" class="flex items-center">
+                <svg class="w-8 h-8 mr-2" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#b9ff66"/>
+                    <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="#191a23"/>
+                </svg>
+                <span class="text-3xl font-bold tracking-tight text-dark-black">GrowGenie</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-10 text-xl font-medium">
+                <a href="about.php" class="text-lime-green font-bold">About us</a>
+                <a href="index.php#services" class="hover:text-lime-green transition">Services</a>
+                <a href="index.php#process" class="hover:text-lime-green transition">Process</a>
+                <a href="login.php" class="hover:text-lime-green transition">Login</a>
+                <a href="register.php" class="btn-positivus btn-outline">Request a quote</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-[85rem] mx-auto px-6 md:px-10 overflow-hidden pt-12">
+        <!-- Hero Section -->
+        <section class="flex flex-col lg:flex-row items-center justify-between py-16 mb-12 bg-light-gray rounded-[45px] p-12 border border-dark-black">
+            <div class="lg:w-1/2 pr-0 lg:pr-12">
+                <span class="badge-lime text-xl font-bold mb-6 inline-block">Our Story</span>
+                <h1 class="text-6xl font-bold leading-[1.05] mb-8 text-dark-black tracking-tight">
+                    We are the architects of startup success
+                </h1>
+                <p class="text-2xl text-gray-700 leading-relaxed font-medium">
+                    GrowGenie was founded on a simple belief: every great idea deserves the right tools to succeed. We bridge the gap between innovation and execution.
+                </p>
+            </div>
+            <div class="lg:w-1/2 flex justify-center mt-12 lg:mt-0">
+                <svg class="w-full max-w-md text-dark-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Stats / Experience Section -->
+        <section class="mb-32">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="card-positivus text-center">
+                    <p class="text-6xl font-bold text-lime-green drop-shadow-[2px_2px_0_#191a23]">10+</p>
+                    <p class="text-xl font-bold mt-4">Years Experience</p>
+                </div>
+                <div class="card-positivus text-center bg-dark-black text-white">
+                    <p class="text-6xl font-bold text-lime-green drop-shadow-[2px_2px_0_#ffffff]">500+</p>
+                    <p class="text-xl font-bold mt-4">Startups Launched</p>
+                </div>
+                <div class="card-positivus text-center">
+                    <p class="text-6xl font-bold text-lime-green drop-shadow-[2px_2px_0_#191a23]">₹50M+</p>
+                    <p class="text-xl font-bold mt-4">Funding Raised</p>
+                </div>
+                <div class="card-positivus text-center lime">
+                    <p class="text-6xl font-bold text-dark-black drop-shadow-[2px_2px_0_#ffffff]">24/7</p>
+                    <p class="text-xl font-bold mt-4">Expert Support</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Work Section -->
+        <section class="mb-32">
+            <div class="section-heading">
+                <span class="heading-tag">Our Work</span>
+                <p class="heading-desc">Real results from real startups. See how we've helped founders turn their vision into reality.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Case Study 1 -->
+                <div class="card-positivus dark p-10 group cursor-pointer hover:border-lime-green">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h3 class="text-3xl font-bold text-white mb-2">FinTech Innovators</h3>
+                            <p class="text-lime-green font-medium">Digital Banking App</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-white text-dark-black flex items-center justify-center group-hover:bg-lime-green transition transform group-hover:rotate-45">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-lg mb-8 line-clamp-3">Using our Genie Roadmap generator, FinTech Innovators successfully planned their MVP launch within 3 months, securing seed funding and acquiring their first 10,000 users.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 border border-gray-600 rounded-full text-sm font-bold text-white">Genie Roadmap</span>
+                        <span class="px-4 py-2 border border-gray-600 rounded-full text-sm font-bold text-white">Growth Marketing</span>
+                    </div>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="card-positivus bg-light-gray p-10 group cursor-pointer">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h3 class="text-3xl font-bold text-dark-black mb-2">EcoBite Delivery</h3>
+                            <p class="text-lime-green font-bold px-3 py-1 bg-dark-black inline-block rounded-md mt-2">Sustainable Food</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-dark-black text-lime-green flex items-center justify-center group-hover:scale-110 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 text-lg mb-8 line-clamp-3">We implemented an aggressive hyperlocal marketing strategy that reduced their Customer Acquisition Cost (CAC) by 40% and increased repeat orders.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 border border-dark-black rounded-full text-sm font-bold text-dark-black bg-white">Local SEO</span>
+                        <span class="px-4 py-2 border border-dark-black rounded-full text-sm font-bold text-dark-black bg-white">Social Media Ads</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="mb-32">
+            <div class="section-heading">
+                <span class="heading-tag">Leadership</span>
+                <p class="heading-desc">Meet the skilled and experienced team behind our successful digital marketing strategies</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Team Member 1 -->
+                <div class="team-card">
+                    <div class="flex items-center mb-6 border-b border-dark-black pb-6">
+                        <div class="team-image-wrapper mr-4">
+                            <div class="team-shape"></div>
+                            <img src="https://i.pravatar.cc/150?img=11" alt="John Smith" class="team-image">
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold">John Smith</h4>
+                            <p class="text-sm">CEO and Founder</p>
+                        </div>
+                        <a href="#" class="linkedin-icon"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                    </div>
+                    <p class="text-sm">10+ years of experience in digital marketing. Expertise in SEO, PPC, and content strategy.</p>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-card">
+                    <div class="flex items-center mb-6 border-b border-dark-black pb-6">
+                        <div class="team-image-wrapper mr-4">
+                            <div class="team-shape"></div>
+                            <img src="https://i.pravatar.cc/150?img=47" alt="Jane Doe" class="team-image">
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold">Jane Doe</h4>
+                            <p class="text-sm">Director of Operations</p>
+                        </div>
+                        <a href="#" class="linkedin-icon"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                    </div>
+                    <p class="text-sm">7+ years of experience in project management and team leadership. Strong organizational skills.</p>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="team-card">
+                    <div class="flex items-center mb-6 border-b border-dark-black pb-6">
+                        <div class="team-image-wrapper mr-4">
+                            <div class="team-shape"></div>
+                            <img src="https://i.pravatar.cc/150?img=12" alt="Michael Brown" class="team-image">
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold">Michael Brown</h4>
+                            <p class="text-sm">SEO Specialist</p>
+                        </div>
+                        <a href="#" class="linkedin-icon"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                    </div>
+                    <p class="text-sm">5+ years of experience in SEO and content creation. Proficient in keyword research.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#191a23] text-white py-16 mt-20">
+        <div class="max-w-[85rem] mx-auto px-6 md:px-10">
+            <div class="flex flex-col md:flex-row justify-between items-start border-b border-gray-700 pb-12 mb-12">
+                <!-- Brand and Address -->
+                <div class="mb-10 md:mb-0 max-w-sm">
+                    <div class="flex items-center mb-6">
+                        <svg class="w-8 h-8 mr-2" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#b9ff66"/>
+                            <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="#191a23"/>
+                        </svg>
+                        <span class="text-3xl font-bold tracking-tight">GrowGenie</span>
+                    </div>
+                    <div class="space-y-2 text-gray-300">
+                        <p class="font-bold text-white mb-4">Contact us:</p>
+                        <p>Email: info@growgenie.com</p>
+                        <p>Phone: +91 98765 43210</p>
+                        <p>Address: 404 Innovation Park, Startup Hub, Bengaluru, Karnataka 560001, India</p>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div class="mb-10 md:mb-0 flex flex-col space-y-4 text-lg">
+                    <a href="about.php" class="text-[#b9ff66] transition">About us</a>
+                    <a href="index.php#services" class="hover:text-[#b9ff66] transition">Services</a>
+                    <a href="index.php#process" class="hover:text-[#b9ff66] transition">Use Cases</a>
+                    <a href="register.php" class="hover:text-[#b9ff66] transition">Pricing</a>
+                    <a href="index.php#contact" class="hover:text-[#b9ff66] transition">Contact Us</a>
+                </div>
+
+                <!-- Socials -->
+                <div class="flex space-x-4">
+                    <a href="#" class="w-12 h-12 rounded-full bg-white text-[#191a23] flex items-center justify-center hover:bg-[#b9ff66] transition">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-white text-[#191a23] flex items-center justify-center hover:bg-[#b9ff66] transition">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-white text-[#191a23] flex items-center justify-center hover:bg-[#b9ff66] transition">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>© 2026 GrowGenie. All Rights Reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
