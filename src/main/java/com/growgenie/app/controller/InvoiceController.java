@@ -93,14 +93,7 @@ public class InvoiceController {
                     }
 
                     if (pdfBytes != null) {
-                        try {
-                            mailService.sendMailWithAttachment(recipient_email, subject, body, "Invoice_" + client_name.replaceAll("\\s+", "_") + ".pdf", pdfBytes);
-                        } catch (Exception mailEx) {
-                            System.err.println("Email failed (likely blocked by Railway firewall): " + mailEx.getMessage());
-                            response.put("status", "success");
-                            response.put("message", "Invoice generated and saved! Note: Auto-email was blocked by the cloud server. You can attach the downloaded PDF manually.");
-                            return response;
-                        }
+                        mailService.sendMailWithAttachment(recipient_email, subject, body, "Invoice_" + client_name.replaceAll("\\s+", "_") + ".pdf", pdfBytes);
                     } else {
                         try {
                             mailService.sendMail(recipient_email, subject, body);
