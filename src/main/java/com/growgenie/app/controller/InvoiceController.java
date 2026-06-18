@@ -92,14 +92,17 @@ public class InvoiceController {
                         }
                     }
 
-                    if (pdfBytes != null) {
-                        mailService.sendMailWithAttachment(recipient_email, subject, body, "Invoice_" + client_name.replaceAll("\\s+", "_") + ".pdf", pdfBytes);
-                    } else {
-                        try {
+                    try {
+                        if (pdfBytes != null) {
+                            mailService.sendMailWithAttachment(recipient_email, subject, body, "Invoice_" + client_name.replaceAll("\\s+", "_") + ".pdf", pdfBytes);
+                        } else {
                             mailService.sendMail(recipient_email, subject, body);
-                        } catch (Exception mailEx) {
-                            System.err.println("Email failed: " + mailEx.getMessage());
                         }
+                    } catch (Exception mailEx) {
+                        System.err.println("Email delivery failed: " + mailEx.getMessage());
+                        response.put("status", "success");
+                        response.put("message", "Invoice generated and saved! Note: Auto-email via Resend failed (likely since recipient is not verified in sandbox). You can attach the downloaded PDF manually.");
+                        return response;
                     }
                 }
 
