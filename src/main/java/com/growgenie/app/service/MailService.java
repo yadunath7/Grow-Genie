@@ -24,7 +24,10 @@ public class MailService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("api-key", brevoApiKey);
+        
+        // Clean the API key of any leading/trailing spaces or carriage returns
+        String cleanApiKey = brevoApiKey != null ? brevoApiKey.trim().replaceAll("[\\r\\n]", "") : "";
+        headers.set("api-key", cleanApiKey);
 
         Map<String, Object> payload = new HashMap<>();
         
@@ -45,7 +48,6 @@ public class MailService {
         if (attachmentFilename != null && attachmentData != null) {
             Map<String, Object> attachment = new HashMap<>();
             attachment.put("name", attachmentFilename);
-            // Brevo expects Base64 encoded attachment content
             String base64Content = Base64.getEncoder().encodeToString(attachmentData);
             attachment.put("content", base64Content);
             payload.put("attachment", Collections.singletonList(attachment));
