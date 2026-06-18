@@ -533,10 +533,11 @@
 
                     document.body.removeChild(container);
 
-                    const formData = new URLSearchParams();
+                    const formData = new FormData();
                     formData.append('action', 'save');
                     formData.append('client_name', client_name);
                     formData.append('recipient_email', recipient_email);
+                    formData.append('product', product);
                     formData.append('gst_number', gst_number);
                     formData.append('amount', totalWithGST); // Save total including GST
                     formData.append('date', date);
@@ -545,7 +546,6 @@
 
                     const res = await fetch(`${API_BASE}/invoices`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: formData
                     });
                     const data = await res.json();
