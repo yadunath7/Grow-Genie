@@ -1,6 +1,6 @@
 // Global JS logic for GrowGenie
 
-const API_BASE = 'api';
+const API_BASE = '/api';
 
 const translations = {
     en: {
