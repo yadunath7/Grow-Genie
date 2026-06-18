@@ -551,10 +551,12 @@
                     const data = await res.json();
 
                     if(data.status === 'success') {
-                        alert(data.message || "Invoice Generated!");
                         closeInvoiceModal();
                         document.getElementById('invoice-form').reset();
                         fetchInvoices();
+                        setTimeout(() => {
+                            alert(data.message || "Invoice Generated!");
+                        }, 50);
                     } else {
                         alert("Backend Error: " + data.message);
                     }
