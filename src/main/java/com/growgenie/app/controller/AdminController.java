@@ -47,6 +47,9 @@ public class AdminController {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
+    @Autowired
+    private com.growgenie.app.service.SettingsService settingsService;
+
     private boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null && Boolean.TRUE.equals(session.getAttribute("admin_logged_in"))) {
@@ -234,9 +237,24 @@ public class AdminController {
     }
 
     @GetMapping("/settings")
-    public String settings(HttpServletRequest request, Model model) {
+    public String settings(HttpServletRequest request, Model model, @RequestParam(required = false) String success) {
         if (!isAdmin(request)) return "redirect:/login";
+        model.addAttribute("settings", settingsService.getAllSettings());
+        if (success != null) {
+            model.addAttribute("success_msg", "Settings updated successfully!");
+        }
         return "admin/settings";
+    }
+
+    @PostMapping("/settings")
+    public String updateSettings(HttpServletRequest request, @RequestParam java.util.Map<String, String> allParams) {
+        if (!isAdmin(request)) return "redirect:/login";
+        for (java.util.Map.Entry<String, String> entry : allParams.entrySet()) {
+            String key = entry.getKey();
+            if (key.equals("success") || key.equals("delete")) continue; // avoid internal params
+            settingsService.updateSetting(key, entry.getValue());
+        }
+        return "redirect:/admin/settings?success=1";
     }
 
     @GetMapping("/logout")

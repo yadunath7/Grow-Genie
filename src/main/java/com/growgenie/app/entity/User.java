@@ -16,6 +16,8 @@ public class User {
     private String subscriptionStatus;
     private LocalDateTime createdAt;
 
+    private String theme = "classic";
+
     public Long getId() {
         return id;
     }
@@ -70,5 +72,13 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }

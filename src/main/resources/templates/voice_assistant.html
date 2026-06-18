@@ -16,11 +16,18 @@
         }
         .mic-active { animation: pulseRing 1.2s ease-out infinite; }
         @keyframes wave { 0%,100%{height:8px} 50%{height:24px} }
-        .wave-bar { width: 4px; border-radius: 4px; background: #b9ff66; animation: wave 0.6s ease-in-out infinite; }
+        .wave-bar { width: 4px; border-radius: 4px; background: var(--lime-green); animation: wave 0.6s ease-in-out infinite; }
         .wave-bar:nth-child(2) { animation-delay: 0.1s; }
         .wave-bar:nth-child(3) { animation-delay: 0.2s; }
         .wave-bar:nth-child(4) { animation-delay: 0.3s; }
         .wave-bar:nth-child(5) { animation-delay: 0.15s; }
+    </style>
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
     </style>
 </head>
 <body class="bg-white text-dark-black min-h-screen flex">
@@ -39,7 +46,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <div id="voice-status-badge" class="flex items-center gap-2 border-2 border-dark-black rounded-full px-5 py-2 shadow-[4px_4px_0_#191a23] bg-white">
+                <div id="voice-status-badge" class="flex items-center gap-2 border-2 border-dark-black rounded-full px-5 py-2 shadow-[4px_4px_0_var(--dark-black)] bg-white">
                     <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-gray-300 border border-dark-black inline-block"></span>
                     <span id="status-text" class="text-sm font-black uppercase tracking-wider">Ready</span>
                 </div>
@@ -57,7 +64,7 @@
 
                     <div id="chat-box" class="flex-1 bg-light-gray border-2 border-dark-black rounded-[40px] p-6 mb-4 overflow-y-auto space-y-4">
                         <!-- Welcome message -->
-                        <div class="bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-5 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_#b9ff66]">
+                        <div class="bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-5 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_var(--lime-green)]">
                             Hey! 👋 I'm Genie, your AI voice assistant. Click the microphone or type a question to get started!
                         </div>
                     </div>
@@ -65,11 +72,11 @@
                     <!-- Input Bar -->
                     <form id="chat-form" class="flex items-center gap-3">
                         <input type="text" id="chat-input"
-                            class="flex-1 bg-white border-2 border-dark-black rounded-3xl px-6 py-4 text-lg font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all"
+                            class="flex-1 bg-white border-2 border-dark-black rounded-3xl px-6 py-4 text-lg font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all"
                             placeholder="Type or speak your question…" data-i18n-placeholder="voice_input_placeholder">
 
                         <!-- Send -->
-                        <button type="submit" class="bg-lime-green border-2 border-dark-black px-6 py-4 rounded-3xl shadow-[4px_4px_0_#191a23] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <button type="submit" class="bg-lime-green border-2 border-dark-black px-6 py-4 rounded-3xl shadow-[4px_4px_0_var(--dark-black)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
                             <svg class="w-7 h-7 text-dark-black" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                         </button>
                     </form>
@@ -81,7 +88,7 @@
                 <!-- Big Mic Button Area -->
                 <div class="card-positivus bg-white flex flex-col items-center justify-center py-12">
                     <button id="mic-btn" type="button"
-                        class="w-32 h-32 bg-dark-black border-4 border-dark-black rounded-full flex items-center justify-center text-5xl shadow-[8px_8px_0_#b9ff66] hover:bg-lime-green hover:text-dark-black transition-all duration-200 cursor-pointer select-none">
+                        class="w-32 h-32 bg-dark-black border-4 border-dark-black rounded-full flex items-center justify-center text-5xl shadow-[8px_8px_0_var(--lime-green)] hover:bg-lime-green hover:text-dark-black transition-all duration-200 cursor-pointer select-none">
                         <span id="mic-icon">🎤</span>
                     </button>
 
@@ -134,8 +141,8 @@
             function addMessage(text, isUser = false) {
                 const msg = document.createElement('div');
                 msg.className = isUser
-                    ? "bg-lime-green text-dark-black border-2 border-dark-black rounded-[30px] rounded-tr-none p-5 font-bold max-w-[85%] ml-auto shadow-[6px_6px_0_#191a23] transform scale-95 animate-[popIn_0.3s_ease_forwards]"
-                    : "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-5 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_#b9ff66] transform scale-95 animate-[popIn_0.3s_ease_forwards]";
+                    ? "bg-lime-green text-dark-black border-2 border-dark-black rounded-[30px] rounded-tr-none p-5 font-bold max-w-[85%] ml-auto shadow-[6px_6px_0_var(--dark-black)] transform scale-95 animate-[popIn_0.3s_ease_forwards]"
+                    : "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-5 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_var(--lime-green)] transform scale-95 animate-[popIn_0.3s_ease_forwards]";
                 msg.textContent = text;
                 chatBox.appendChild(msg);
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -144,7 +151,7 @@
             function showTyping() {
                 const typing = document.createElement('div');
                 typing.id = 'typing-ind';
-                typing.className = "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-5 text-gray-400 italic font-bold max-w-[85%] shadow-[6px_6px_0_#b9ff66] animate-pulse";
+                typing.className = "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-5 text-gray-400 italic font-bold max-w-[85%] shadow-[6px_6px_0_var(--lime-green)] animate-pulse";
                 typing.textContent = "Genie is thinking…";
                 chatBox.appendChild(typing);
                 chatBox.scrollTop = chatBox.scrollHeight;

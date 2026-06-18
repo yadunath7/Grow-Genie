@@ -7,6 +7,13 @@
     <title>Team Management | GrowGenie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
 </head>
 <body class="bg-white text-dark-black min-h-screen flex">
 
@@ -14,8 +21,8 @@
     <div class="w-64 h-screen sidebar fixed top-0 left-0 flex flex-col p-6 border-r-2 border-dark-black bg-white">
         <div class="flex items-center mb-12">
             <svg class="w-8 h-8 mr-2" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#b9ff66"/>
-                <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="#191a23"/>
+                <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="var(--lime-green)"/>
+                <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="var(--dark-black)"/>
             </svg>
             <h1 class="text-2xl font-black uppercase tracking-tighter">Admin</h1>
         </div>
@@ -31,7 +38,7 @@
                 <span>Products</span>
             </a>
             <a href="testimonials" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Testimonials</span></a>
-            <a href="team" class="nav-item active flex items-center p-4 font-bold text-lg bg-lime-green border-2 border-dark-black rounded-2xl shadow-[4px_4px_0_#191a23]"><span>Team</span></a>
+            <a href="team" class="nav-item active flex items-center p-4 font-bold text-lg bg-lime-green border-2 border-dark-black rounded-2xl shadow-[4px_4px_0_var(--dark-black)]"><span>Team</span></a>
             <a href="settings" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Settings</span></a>
         </nav>
         <div class="mt-auto"><a href="logout" class="flex items-center p-4 font-bold text-lg text-red-600 hover:bg-red-50 rounded-2xl transition-all"><span>Logout</span></a></div>
@@ -51,23 +58,23 @@
             <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Name</label>
-                    <input type="text" name="name" required class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="name" required class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Position</label>
-                    <input type="text" name="position" required class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="position" required class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Profile Image</label>
-                    <input type="file" name="image" accept="image/*" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-3 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="file" name="image" accept="image/*" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-3 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">LinkedIn URL</label>
-                    <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/..." class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/..." class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-black uppercase mb-2">Description</label>
-                    <textarea name="description" rows="3" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all"></textarea>
+                    <textarea name="description" rows="3" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all"></textarea>
                 </div>
                 <div class="md:col-span-2">
                     <button type="submit" name="add" class="btn-positivus px-12">Save Member</button>

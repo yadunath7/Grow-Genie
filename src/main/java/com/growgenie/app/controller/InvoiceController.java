@@ -34,6 +34,7 @@ public class InvoiceController {
             @RequestParam(required = false) String date,
             @RequestParam(required = false) String gst_number,
             @RequestParam(required = false) String recipient_email,
+            @RequestParam(required = false) String pdf_base64,
             HttpServletRequest request) {
 
         Map<String, Object> response = new HashMap<>();
@@ -80,7 +81,22 @@ public class InvoiceController {
                             + "</table>"
                             + "<p>Please log in to your account or contact us for more details.</p>"
                             + "<hr><p style='font-size: 12px; color: #888;'>Generated via GrowGenie</p></div>";
-                    mailService.sendMail(recipient_email, subject, body);
+                    
+                    byte[] pdfBytes = null;
+                    if (pdf_base64 != null && !pdf_base64.isEmpty()) {
+                        try {
+                            String base64Data = pdf_base64.contains(",") ? pdf_base64.split(",")[1] : pdf_base64;
+                            pdfBytes = java.util.Base64.getDecoder().decode(base64Data);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    if (pdfBytes != null) {
+                        mailService.sendMailWithAttachment(recipient_email, subject, body, "Invoice_" + client_name.replaceAll("\\s+", "_") + ".pdf", pdfBytes);
+                    } else {
+                        mailService.sendMail(recipient_email, subject, body);
+                    }
                 }
 
                 response.put("status", "success");

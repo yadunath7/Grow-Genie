@@ -23,6 +23,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private com.growgenie.app.service.SettingsService settingsService;
+
     @RequestMapping(value = "/auth", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, Object> authHandler(
             @RequestParam(required = false) String action,
@@ -121,6 +124,7 @@ public class AuthController {
                     adminUser.put("name", "Admin");
                     adminUser.put("email", "admin@growgenie.com");
                     adminUser.put("subscription_status", "active");
+                    adminUser.put("theme", settingsService.getSetting("ui_theme", "classic"));
                     response.put("status", "success");
                     response.put("user", adminUser);
                     return response;
@@ -134,6 +138,7 @@ public class AuthController {
                     userMap.put("email", user.getEmail());
                     userMap.put("subscription_status", user.getSubscriptionStatus());
                     userMap.put("trial_end_date", user.getTrialEndDate());
+                    userMap.put("theme", user.getTheme() != null ? user.getTheme() : "classic");
 
                     response.put("status", "success");
                     response.put("user", userMap);
@@ -151,6 +156,35 @@ public class AuthController {
 
         response.put("status", "error");
         response.put("message", "Invalid action.");
+        return response;
+    }
+
+    @PostMapping("/user/update_theme")
+    public Map<String, Object> updateTheme(@RequestParam String theme, HttpServletRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user_id") == null) {
+            response.put("status", "error");
+            response.put("message", "Unauthorized");
+            return response;
+        }
+        Long userId = (Long) session.getAttribute("user_id");
+        if (userId == 0L) { // Admin
+            settingsService.updateSetting("ui_theme", theme);
+            response.put("status", "success");
+            response.put("message", "Global theme updated.");
+            return response;
+        }
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            user.setTheme(theme);
+            userRepository.save(user);
+            response.put("status", "success");
+            response.put("message", "Theme updated successfully.");
+        } else {
+            response.put("status", "error");
+            response.put("message", "User not found.");
+        }
         return response;
     }
 }

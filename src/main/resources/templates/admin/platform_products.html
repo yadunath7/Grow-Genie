@@ -7,6 +7,13 @@
     <title>Manage Products | Admin | GrowGenie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
 </head>
 <body class="bg-white text-dark-black min-h-screen flex">
 
@@ -14,8 +21,8 @@
     <div class="w-64 h-screen sidebar fixed top-0 left-0 flex flex-col p-6 border-r-2 border-dark-black bg-white overflow-y-auto">
         <div class="flex items-center mb-12">
             <svg class="w-8 h-8 mr-2" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#b9ff66"/>
-                <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="#191a23"/>
+                <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="var(--lime-green)"/>
+                <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="var(--dark-black)"/>
             </svg>
             <h1 class="text-2xl font-black uppercase tracking-tighter">Admin</h1>
         </div>
@@ -23,7 +30,7 @@
             <a href="dashboard" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Dashboard</span></a>
             <a href="users" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Users</span></a>
             <a href="subscriptions" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Subscriptions</span></a>
-            <a href="platform_products" class="nav-item active flex items-center p-4 font-bold text-lg bg-lime-green border-2 border-dark-black rounded-2xl shadow-[4px_4px_0_#191a23]"><span>Products</span></a>
+            <a href="platform_products" class="nav-item active flex items-center p-4 font-bold text-lg bg-lime-green border-2 border-dark-black rounded-2xl shadow-[4px_4px_0_var(--dark-black)]"><span>Products</span></a>
             <a href="testimonials" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Testimonials</span></a>
             <a href="team" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Team</span></a>
             <a href="settings" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Settings</span></a>
@@ -45,27 +52,27 @@
             <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Product Name</label>
-                    <input type="text" name="name" required placeholder="e.g. SEO Audit Template" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="name" required placeholder="e.g. SEO Audit Template" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Price (₹)</label>
-                    <input type="number" step="0.01" name="price" required placeholder="e.g. 1999" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="number" step="0.01" name="price" required placeholder="e.g. 1999" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Rate Type</label>
-                    <input type="text" name="rate_type" placeholder="e.g. ONE-TIME" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="rate_type" placeholder="e.g. ONE-TIME" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Duration</label>
-                    <input type="text" name="duration" placeholder="e.g. N/A or 1 HOUR" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="duration" placeholder="e.g. N/A or 1 HOUR" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-black uppercase mb-2">Description</label>
-                    <textarea name="description" rows="3" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all"></textarea>
+                    <textarea name="description" rows="3" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all"></textarea>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-black uppercase mb-2">Product Image (Optional)</label>
-                    <input type="file" name="image" accept="image/*" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="file" name="image" accept="image/*" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div class="md:col-span-2">
                     <button type="submit" name="add" class="btn-positivus bg-dark-black text-white hover:bg-lime-green hover:text-dark-black px-12">Save Product</button>
@@ -75,9 +82,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            <div th:each="product : ${products}" class="card-positivus relative group flex flex-col justify-between bg-white hover:shadow-[8px_8px_0_#b9ff66] transition-shadow duration-300">
+            <div th:each="product : ${products}" class="card-positivus relative group flex flex-col justify-between bg-white hover:shadow-[8px_8px_0_var(--lime-green)] transition-shadow duration-300">
                 <div>
-                    <a th:href="@{/admin/platform_products(delete=${product.id})}" onclick="return confirm('Delete this product?')" class="absolute top-4 right-4 text-red-500 hover:text-red-700 transition-colors z-10 bg-white rounded-full p-1 border-2 border-dark-black shadow-[2px_2px_0_#191a23]">
+                    <a th:href="@{/admin/platform_products(delete=${product.id})}" onclick="return confirm('Delete this product?')" class="absolute top-4 right-4 text-red-500 hover:text-red-700 transition-colors z-10 bg-white rounded-full p-1 border-2 border-dark-black shadow-[2px_2px_0_var(--dark-black)]">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </a>
                     

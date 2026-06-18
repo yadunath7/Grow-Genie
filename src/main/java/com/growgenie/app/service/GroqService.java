@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.growgenie.app.service.SettingsService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,15 +22,19 @@ import java.util.Map;
 public class GroqService {
 
     private final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
-    // Hardcoding the user's requested API key for now.
-    private final String API_KEY = "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";
+    private final String DEFAULT_API_KEY = "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";
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private SettingsService settingsService;
 
     public String callGroqApi(String systemMessage, String userPrompt, boolean jsonMode, List<Map<String, String>> history) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(API_KEY);
+        
+        String apiKey = settingsService != null ? settingsService.getSetting("groq_api_key", DEFAULT_API_KEY) : DEFAULT_API_KEY;
+        headers.setBearerAuth(apiKey);
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", "llama-3.3-70b-versatile");

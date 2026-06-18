@@ -7,6 +7,13 @@
     <title>Manage Subscriptions | Admin | GrowGenie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
 </head>
 <body class="bg-white text-dark-black min-h-screen flex">
 
@@ -14,15 +21,15 @@
     <div class="w-64 h-screen sidebar fixed top-0 left-0 flex flex-col p-6 border-r-2 border-dark-black bg-white overflow-y-auto">
         <div class="flex items-center mb-12">
             <svg class="w-8 h-8 mr-2" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#b9ff66"/>
-                <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="#191a23"/>
+                <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="var(--lime-green)"/>
+                <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="var(--dark-black)"/>
             </svg>
             <h1 class="text-2xl font-black uppercase tracking-tighter">Admin</h1>
         </div>
         <nav class="flex-1 space-y-2">
             <a href="dashboard" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Dashboard</span></a>
             <a href="users" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Users</span></a>
-            <a href="subscriptions" class="nav-item active flex items-center p-4 font-bold text-lg bg-lime-green border-2 border-dark-black rounded-2xl shadow-[4px_4px_0_#191a23]"><span>Subscriptions</span></a>
+            <a href="subscriptions" class="nav-item active flex items-center p-4 font-bold text-lg bg-lime-green border-2 border-dark-black rounded-2xl shadow-[4px_4px_0_var(--dark-black)]"><span>Subscriptions</span></a>
             <a href="platform_products" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Products</span></a>
             <a href="testimonials" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Testimonials</span></a>
             <a href="team" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Team</span></a>
@@ -45,23 +52,23 @@
             <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Plan Name</label>
-                    <input type="text" name="name" required placeholder="e.g. Monthly Pro" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="name" required placeholder="e.g. Monthly Pro" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Price (₹)</label>
-                    <input type="number" step="0.01" name="price" required placeholder="e.g. 999" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="number" step="0.01" name="price" required placeholder="e.g. 999" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Badge Text</label>
-                    <input type="text" name="badge_text" placeholder="e.g. MOST POPULAR" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="badge_text" placeholder="e.g. MOST POPULAR" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-black uppercase mb-2">Duration</label>
-                    <input type="text" name="duration_text" placeholder="e.g. 30 days" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all">
+                    <input type="text" name="duration_text" placeholder="e.g. 30 days" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-black uppercase mb-2">Features (one per line)</label>
-                    <textarea name="features" rows="4" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all"></textarea>
+                    <textarea name="features" rows="4" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all"></textarea>
                 </div>
                 <div class="md:col-span-2">
                     <button type="submit" name="add" class="btn-positivus px-12">Save Plan</button>

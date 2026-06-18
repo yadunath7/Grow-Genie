@@ -18,6 +18,8 @@ public class Idea {
     private String category;
     private String budget;
     
+    private String location;
+    
     @Column(columnDefinition = "TEXT")
     private String roadmap;
     
@@ -62,6 +64,14 @@ public class Idea {
 
     public void setBudget(String budget) {
         this.budget = budget;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getRoadmap() {

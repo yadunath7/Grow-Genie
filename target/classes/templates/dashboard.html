@@ -8,6 +8,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
 </head>
 <body class="bg-white text-dark-black min-h-screen flex">
 
@@ -25,7 +31,7 @@
                 </div>
             </div>
             <div class="flex items-center space-x-4">
-                <div id="plan-badge" class="flex items-center gap-2 border-2 border-dark-black rounded-full px-6 py-2 shadow-[4px_4px_0_#191a23] bg-white">
+                <div id="plan-badge" class="flex items-center gap-2 border-2 border-dark-black rounded-full px-6 py-2 shadow-[4px_4px_0_var(--dark-black)] bg-white">
                     <span class="w-2.5 h-2.5 rounded-full bg-lime-green border border-dark-black inline-block"></span>
                     <span id="sub-status" class="text-sm font-black uppercase tracking-wider text-dark-black">FREE TRIAL</span>
                 </div>
@@ -65,7 +71,7 @@
             <!-- Genie Planner -->
             <div class="card-positivus flex flex-col justify-between group">
                 <div>
-                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_#b9ff66] text-3xl">🗺️</div>
+                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_var(--lime-green)] text-3xl">🗺️</div>
                     <h4 class="text-2xl font-bold mb-3" data-i18n="ai_planner">Grow Genie Planner</h4>
                     <p class="text-gray-600 font-medium mb-8" data-i18n="ai_roadmap_gen_desc">Startup roadmap, strategy, ad copy & more</p>
                 </div>
@@ -77,7 +83,7 @@
             <!-- Marketing -->
             <div class="card-positivus flex flex-col justify-between group">
                 <div>
-                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_#b9ff66] text-3xl">📣</div>
+                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_var(--lime-green)] text-3xl">📣</div>
                     <h4 class="text-2xl font-bold mb-3" data-i18n="marketing">Marketing & Ads</h4>
                     <p class="text-gray-600 font-medium mb-8" data-i18n="effective_ways">Ad copy, descriptions & multilingual campaigns</p>
                 </div>
@@ -89,7 +95,7 @@
             <!-- Invoice -->
             <div class="card-positivus flex flex-col justify-between group">
                 <div>
-                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_#b9ff66] text-3xl">📄</div>
+                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_var(--lime-green)] text-3xl">📄</div>
                     <h4 class="text-2xl font-bold mb-3" data-i18n="invoices">Invoice Generator</h4>
                     <p class="text-gray-600 font-medium mb-8" data-i18n="invoice_gen_desc">GST-compliant PDF invoices for your business.</p>
                 </div>
@@ -101,7 +107,7 @@
             <!-- Product Catalog -->
             <div class="card-positivus flex flex-col justify-between group">
                 <div>
-                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_#b9ff66] text-3xl">📦</div>
+                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_var(--lime-green)] text-3xl">📦</div>
                     <h4 class="text-2xl font-bold mb-3" data-i18n="products">Product Catalog</h4>
                     <p class="text-gray-600 font-medium mb-8" data-i18n="manage_products">Full CRUD — manage your products & services</p>
                 </div>
@@ -113,7 +119,7 @@
             <!-- FAQ Bot -->
             <div class="card-positivus flex flex-col justify-between group">
                 <div>
-                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_#b9ff66] text-3xl">💬</div>
+                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_var(--lime-green)] text-3xl">💬</div>
                     <h4 class="text-2xl font-bold mb-3" data-i18n="faq_bot">FAQ Bot</h4>
                     <p class="text-gray-600 font-medium mb-8" data-i18n="faq_bot_desc">Train your bot — Genie handles queries 24/7</p>
                 </div>
@@ -125,7 +131,7 @@
             <!-- Multilingual Translator -->
             <div class="card-positivus flex flex-col justify-between group">
                 <div>
-                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_#b9ff66] text-3xl">🌐</div>
+                    <div class="w-16 h-16 bg-dark-black border-2 border-dark-black rounded-2xl flex items-center justify-center mb-8 shadow-[4px_4px_0_var(--lime-green)] text-3xl">🌐</div>
                     <h4 class="text-2xl font-bold mb-3" data-i18n="translator">Translator</h4>
                     <p class="text-gray-600 font-medium mb-8" data-i18n="translator_desc">Campaigns in Hindi, Tamil, Bengali, Marathi</p>
                 </div>
@@ -140,11 +146,11 @@
             <div>
                 <h3 class="text-3xl font-bold mb-4" data-i18n="active_subscriptions">Your Subscription Plan</h3>
                 <div class="flex items-center space-x-6">
-                    <span id="plan-badge" class="badge-lime text-lg font-bold bg-white px-6 py-2 border-2 border-dark-black rounded-xl uppercase tracking-wider shadow-[4px_4px_0_#191a23]">FREE_TRIAL</span>
+                    <span id="plan-badge" class="badge-lime text-lg font-bold bg-white px-6 py-2 border-2 border-dark-black rounded-xl uppercase tracking-wider shadow-[4px_4px_0_var(--dark-black)]">FREE_TRIAL</span>
                     <p id="expiry-text" class="text-gray-600 font-bold text-lg" data-i18n="valid_until">Valid until ...</p>
                 </div>
             </div>
-            <button onclick="openUpgradeModal()" class="mt-8 md:mt-0 btn-positivus text-xl px-12 py-5 shadow-[8px_8px_0_#b9ff66] border-2 border-dark-black hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all">
+            <button onclick="openUpgradeModal()" class="mt-8 md:mt-0 btn-positivus text-xl px-12 py-5 shadow-[8px_8px_0_var(--lime-green)] border-2 border-dark-black hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all">
                 <span data-i18n="upgrade_plan">Upgrade Now</span> <svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
             </button>
         </div>
@@ -163,7 +169,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 p-4 pt-10">
                 
-                    <div th:each="plan : ${subscription_plans}" class="card-positivus border-2 border-dark-black flex flex-col justify-between hover:scale-105 transition-transform duration-300 bg-white h-full shadow-[8px_8px_0_#191a23] relative">
+                    <div th:each="plan : ${subscription_plans}" class="card-positivus border-2 border-dark-black flex flex-col justify-between hover:scale-105 transition-transform duration-300 bg-white h-full shadow-[8px_8px_0_var(--dark-black)] relative">
                         
                             <div th:if="${plan.badgeText != null && !plan.badgeText.isEmpty()}" class="absolute -top-4 left-1/2 -translate-x-1/2 badge-lime text-[10px] font-bold uppercase py-1 px-4 border border-dark-black shadow-[4px_4px_0_#000]" th:text="${plan.badgeText}">
                             </div>
@@ -175,7 +181,7 @@
                                 <li th:each="feature : ${#strings.arraySplit(plan.features, ',')}" class="flex items-center"><svg class="w-5 h-5 text-lime-green mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> <span th:text="${feature}"></span></li>
                             </ul>
                         </div>
-                        <button th:data-plan="${plan.name}" th:data-price="${plan.price}" onclick="simulateUpgrade(this.getAttribute('data-plan'), parseFloat(this.getAttribute('data-price')), 30)" class="btn-positivus w-full bg-dark-black text-white hover:bg-lime-green hover:text-dark-black transition border-2 border-dark-black shadow-[4px_4px_0_#b9ff66]">Select Plan</button>
+                        <button th:data-plan="${plan.name}" th:data-price="${plan.price}" onclick="simulateUpgrade(this.getAttribute('data-plan'), parseFloat(this.getAttribute('data-price')), 30)" class="btn-positivus w-full bg-dark-black text-white hover:bg-lime-green hover:text-dark-black transition border-2 border-dark-black shadow-[4px_4px_0_var(--lime-green)]">Select Plan</button>
                     </div>
                     
                 
@@ -188,12 +194,12 @@
     <!-- Success Modal -->
     <div id="success-modal" class="fixed inset-0 bg-dark-black/90 backdrop-blur-xl z-[200] hidden flex items-center justify-center p-4 text-center">
         <div class="card-positivus bg-white p-16 max-w-xl">
-            <div class="w-24 h-24 bg-lime-green border-4 border-dark-black rounded-full flex items-center justify-center mx-auto mb-8 shadow-[8px_8px_0_#191a23] animate-bounce">
+            <div class="w-24 h-24 bg-lime-green border-4 border-dark-black rounded-full flex items-center justify-center mx-auto mb-8 shadow-[8px_8px_0_var(--dark-black)] animate-bounce">
                 <svg class="w-12 h-12 text-dark-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <h3 class="text-4xl font-black mb-4">PLAN ACTIVATED!</h3>
             <p class="text-xl text-gray-600 mb-10">Welcome to the <span id="activated-plan" class="font-bold text-dark-black">Pro</span> tier. Your account has been upgraded successfully.</p>
-            <button onclick="window.location.reload()" class="btn-positivus w-full py-5 text-xl bg-lime-green shadow-[8px_8px_0_#191a23]">Back to Dashboard</button>
+            <button onclick="window.location.reload()" class="btn-positivus w-full py-5 text-xl bg-lime-green shadow-[8px_8px_0_var(--dark-black)]">Back to Dashboard</button>
         </div>
     </div>
 
@@ -235,6 +241,10 @@
                     document.getElementById('total-products').textContent = data.count;
                 }
             } catch (e) {}
+
+            if (window.location.search.includes('upgrade=true')) {
+                openUpgradeModal();
+            }
         });
 
         function updateSubscriptionUI(user) {
@@ -294,7 +304,7 @@
                 "prefill": {
                     "name": document.querySelector('.user-name').textContent || "",
                 },
-                "theme": { "color": "#b9ff66" }
+                "theme": { "color": "[[${theme_primary} != null ? ${theme_primary} : 'var(--lime-green)' ]]" }
             };
 
             const rzp = new Razorpay(options);

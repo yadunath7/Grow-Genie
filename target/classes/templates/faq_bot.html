@@ -12,6 +12,13 @@
             to { opacity: 1; transform: scale(1); }
         }
     </style>
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
 </head>
 <body class="bg-white text-dark-black min-h-screen flex">
 
@@ -52,21 +59,21 @@
                         </div>
                     </div>
                     <div id="chat-box" class="flex-1 bg-light-gray border-2 border-dark-black rounded-[40px] p-8 mb-6 overflow-y-auto space-y-6">
-                        <div class="bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-6 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_#b9ff66]" data-i18n="chat_welcome">
+                        <div class="bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-6 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_var(--lime-green)]" data-i18n="chat_welcome">
                             Hello! I'm your Genie assistant. You can click on the questions to the left or type your own question below!
                         </div>
                     </div>
                     <form id="chat-form" class="flex space-x-4 items-center">
-                        <input type="text" id="chat-input" class="flex-1 bg-white border-2 border-dark-black rounded-3xl px-8 py-5 text-xl font-bold focus:shadow-[6px_6px_0_#b9ff66] focus:outline-none transition-all" placeholder="Type your question here..." data-i18n-placeholder="chat_placeholder">
+                        <input type="text" id="chat-input" class="flex-1 bg-white border-2 border-dark-black rounded-3xl px-8 py-5 text-xl font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all" placeholder="Type your question here..." data-i18n-placeholder="chat_placeholder">
 
                         <!-- Mic Button -->
                         <button type="button" id="mic-btn" title="Speak your question"
-                            class="bg-white border-2 border-dark-black px-5 py-5 rounded-3xl shadow-[4px_4px_0_#191a23] hover:bg-lime-green hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center">
+                            class="bg-white border-2 border-dark-black px-5 py-5 rounded-3xl shadow-[4px_4px_0_var(--dark-black)] hover:bg-lime-green hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center">
                             <span id="mic-icon" class="text-2xl">🎤</span>
                         </button>
 
                         <!-- Send Button -->
-                        <button type="submit" class="bg-lime-green border-2 border-dark-black px-8 rounded-3xl shadow-[6px_6px_0_#191a23] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <button type="submit" class="bg-lime-green border-2 border-dark-black px-8 rounded-3xl shadow-[6px_6px_0_var(--dark-black)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
                             <svg class="w-8 h-8 text-dark-black" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                         </button>
                     </form>
@@ -112,7 +119,7 @@
                 faqList.innerHTML = '';
                 GROWGENIE_FAQS.forEach(faq => {
                     const item = document.createElement('div');
-                    item.className = "bg-light-gray border-2 border-dark-black p-4 rounded-2xl cursor-pointer hover:bg-lime-green hover:shadow-[4px_4px_0_#191a23] transition-all font-bold text-sm";
+                    item.className = "bg-light-gray border-2 border-dark-black p-4 rounded-2xl cursor-pointer hover:bg-lime-green hover:shadow-[4px_4px_0_var(--dark-black)] transition-all font-bold text-sm";
                     item.textContent = faq.q;
                     item.onclick = () => handleQuestionClick(faq);
                     faqList.appendChild(item);
@@ -122,8 +129,8 @@
             function addMessage(text, isUser = false) {
                 const msg = document.createElement('div');
                 msg.className = isUser
-                    ? "bg-lime-green text-dark-black border-2 border-dark-black rounded-[30px] rounded-tr-none p-6 font-bold max-w-[85%] ml-auto shadow-[6px_6px_0_#191a23] transform transition-all duration-300 scale-95 animate-[popIn_0.3s_ease_forwards]"
-                    : "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-6 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_#b9ff66] transform transition-all duration-300 scale-95 animate-[popIn_0.3s_ease_forwards]";
+                    ? "bg-lime-green text-dark-black border-2 border-dark-black rounded-[30px] rounded-tr-none p-6 font-bold max-w-[85%] ml-auto shadow-[6px_6px_0_var(--dark-black)] transform transition-all duration-300 scale-95 animate-[popIn_0.3s_ease_forwards]"
+                    : "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-6 text-dark-black font-bold max-w-[85%] shadow-[6px_6px_0_var(--lime-green)] transform transition-all duration-300 scale-95 animate-[popIn_0.3s_ease_forwards]";
                 msg.textContent = text;
                 chatBox.appendChild(msg);
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -131,7 +138,7 @@
 
             function showTypingIndicator(callback) {
                 const typing = document.createElement('div');
-                typing.className = "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-6 text-gray-400 italic font-bold max-w-[85%] shadow-[6px_6px_0_#b9ff66] animate-pulse";
+                typing.className = "bg-white border-2 border-dark-black rounded-[30px] rounded-tl-none p-6 text-gray-400 italic font-bold max-w-[85%] shadow-[6px_6px_0_var(--lime-green)] animate-pulse";
                 typing.textContent = "Genie is typing…";
                 chatBox.appendChild(typing);
                 chatBox.scrollTop = chatBox.scrollHeight;

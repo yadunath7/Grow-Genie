@@ -10,6 +10,13 @@
     <!-- Include jsPDF -->
     <!-- Include html2pdf.js for better multilingual PDF support -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
 </head>
 <body class="bg-white min-h-screen flex">
 
@@ -120,7 +127,7 @@
             <div id="invoice-history" class="space-y-6">
                 <!-- Empty State -->
                 <div id="empty-state" class="flex flex-col items-center justify-center py-20 text-center">
-                    <div class="w-24 h-24 bg-white border-4 border-dark-black rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-[8px_8px_0_#191a23]">🧾</div>
+                    <div class="w-24 h-24 bg-white border-4 border-dark-black rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-[8px_8px_0_var(--dark-black)]">🧾</div>
                     <h4 class="text-2xl font-black uppercase" data-i18n="no_invoices">No invoices yet</h4>
                     <p class="text-gray-500 font-medium mt-2" data-i18n="no_invoices_desc">Click 'New Invoice' to generate your first GST invoice.</p>
                 </div>
@@ -374,7 +381,7 @@
                         if (data.data.length === 0) {
                             historyContainer.innerHTML = `
                                 <div id="empty-state" class="flex flex-col items-center justify-center py-20 text-center w-full">
-                                    <div class="w-24 h-24 bg-white border-4 border-dark-black rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-[8px_8px_0_#191a23]">🧾</div>
+                                    <div class="w-24 h-24 bg-white border-4 border-dark-black rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-[8px_8px_0_var(--dark-black)]">🧾</div>
                                     <h4 class="text-2xl font-black uppercase">No invoices yet</h4>
                                     <p class="text-gray-500 font-medium mt-2">Click 'New Invoice' to generate your first GST invoice.</p>
                                 </div>
@@ -387,7 +394,7 @@
                                 else pending += amt;
 
                                 return `
-                                    <div class="p-8 bg-white border-2 border-dark-black rounded-[35px] flex justify-between items-center hover:shadow-[6px_6px_0_#191a23] transition">
+                                    <div class="p-8 bg-white border-2 border-dark-black rounded-[35px] flex justify-between items-center hover:shadow-[6px_6px_0_var(--dark-black)] transition">
                                         <div>
                                             <div class="flex items-center gap-3 mb-1">
                                                 <h4 class="text-2xl font-bold text-dark-black">${inv.client_name}</h4>
@@ -447,11 +454,11 @@
                     const compName = businessProfile?.company_name || 'GrowGenie Business';
                     const compAddr = businessProfile?.address || 'Your Business Address';
                     const compCont = businessProfile?.contact_details || 'Your Contact Details';
-                    const compLogo = businessProfile?.logo_path ? `<img src="${businessProfile.logo_path}" style="height: 60px; object-contain: contain;">` : `<div style="background: #b9ff66; padding: 15px 30px; border: 3px solid #191a23; border-radius: 20px; font-weight: 900;">GrowGenie</div>`;
+                    const compLogo = businessProfile?.logo_path ? `<img src="${businessProfile.logo_path}" style="height: 60px; object-contain: contain;">` : `<div style="background: var(--lime-green); padding: 15px 30px; border: 3px solid var(--dark-black); border-radius: 20px; font-weight: 900;">GrowGenie</div>`;
                     const compStamp = businessProfile?.stamp_path ? `<div style="margin-top: 20px; text-align: right;"><img src="${businessProfile.stamp_path}" style="height: 80px; object-fit: contain;"><p style="font-size: 12px; font-weight: bold; margin-top: 5px;">AUTHORIZED SIGNATORY</p></div>` : '';
 
                     template.innerHTML = `
-                        <div style="border: 4px solid #191a23; padding: 40px; border-radius: 40px; background: white; color: #191a23; font-family: sans-serif;">
+                        <div style="border: 4px solid var(--dark-black); padding: 40px; border-radius: 40px; background: white; color: var(--dark-black); font-family: sans-serif;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px;">
                                 <h1 style="font-size: 60px; font-weight: 900; margin: 0;">${labels.title}</h1>
                                 ${compLogo}
@@ -471,7 +478,7 @@
                                 </div>
                             </div>
                             <table style="width: 100%; border-collapse: collapse;">
-                                <tr style="background: #191a23; color: #b9ff66;">
+                                <tr style="background: var(--dark-black); color: var(--lime-green);">
                                     <th style="padding: 20px; text-align: left; border-radius: 20px 0 0 20px;">${labels.desc}</th>
                                     <th style="padding: 20px; text-align: right; border-radius: 0 20px 20px 0;">${labels.amount}</th>
                                 </tr>
@@ -486,7 +493,7 @@
                                     <p>Generated via GrowGenie Business Builder</p>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div style="background: #f3f3f3; padding: 20px 40px; border-radius: 30px; border: 2px solid #191a23; margin-bottom: 20px;">
+                                    <div style="background: #f3f3f3; padding: 20px 40px; border-radius: 30px; border: 2px solid var(--dark-black); margin-bottom: 20px;">
                                         <p style="font-size: 14px; font-weight: 900; color: #666; margin: 0;">TOTAL PAYABLE</p>
                                         <p style="font-size: 36px; font-weight: 900; margin: 0;">₹${(parseFloat(amount) * 1.18).toLocaleString('en-IN', {maximumFractionDigits: 2})}</p>
                                         <p style="font-size: 12px; color: #888; margin: 0;">Includes 18% GST</p>
@@ -500,13 +507,31 @@
                     const baseAmount = parseFloat(amount);
                     const totalWithGST = baseAmount * 1.18;
 
-                    await html2pdf().set({ 
+                    // Briefly attach to DOM in an off-screen container so html2canvas renders it correctly
+                    const container = document.createElement('div');
+                    container.style.position = 'absolute';
+                    container.style.left = '-9999px';
+                    container.style.top = '0';
+                    container.appendChild(template);
+                    document.body.appendChild(container);
+
+                    const pdfBase64 = await html2pdf().set({ 
                         margin: 10, 
                         filename: `Invoice_${client_name.replace(/\s+/g, '_')}.pdf`,
                         image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2 },
+                        html2canvas: { scale: 2, useCORS: true },
                         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    }).from(template).save();
+                    }).from(template).outputPdf('datauristring');
+
+                    // Trigger download manually using the base64 data URI
+                    const link = document.createElement('a');
+                    link.href = pdfBase64;
+                    link.download = `Invoice_${client_name.replace(/\s+/g, '_')}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    document.body.removeChild(container);
 
                     const formData = new URLSearchParams();
                     formData.append('action', 'save');
@@ -516,6 +541,7 @@
                     formData.append('amount', totalWithGST); // Save total including GST
                     formData.append('date', date);
                     formData.append('status', status);
+                    formData.append('pdf_base64', pdfBase64);
 
                     const res = await fetch(`${API_BASE}/invoices`, {
                         method: 'POST',

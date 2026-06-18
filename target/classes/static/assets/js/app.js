@@ -151,14 +151,14 @@ function toggleSidebar() {
 function getSidebarHTML(activePage) {
     return `
         <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-        <div class="w-64 h-screen sidebar fixed top-0 left-0 flex flex-col p-6 border-r border-[#191a23] bg-white">
+        <div class="w-64 h-screen sidebar fixed top-0 left-0 flex flex-col p-6 border-r border-[var(--dark-black)] bg-white">
             <div class="flex items-center justify-between mb-12">
                 <div class="flex items-center">
                     <svg class="w-8 h-8 mr-2" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#b9ff66"/>
-                        <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="#191a23"/>
+                        <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="var(--lime-green)"/>
+                        <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="var(--dark-black)"/>
                     </svg>
-                    <h1 class="text-2xl font-bold tracking-tight text-[#191a23]">GrowGenie</h1>
+                    <h1 class="text-2xl font-bold tracking-tight text-[var(--dark-black)]">GrowGenie</h1>
                 </div>
                 <button onclick="toggleSidebar()" class="text-dark-black hover:text-lime-green transition">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>
@@ -166,44 +166,44 @@ function getSidebarHTML(activePage) {
             </div>
             
             <nav class="flex-1 space-y-2 overflow-y-auto">
-                <div onclick="window.location.href='dashboard'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'dashboard' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='dashboard'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'dashboard' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     <span data-i18n="dashboard">Dashboard</span>
                 </div>
-                <div onclick="window.location.href='products'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'products' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='products'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'products' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     <span data-i18n="products">Products</span>
                 </div>
-                <div onclick="window.location.href='ideas'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'ideas' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='ideas'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'ideas' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     <span data-i18n="ai_planner">Grow Genie Planner</span>
                 </div>
-                <div onclick="window.location.href='invoices'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'invoices' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='invoices'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'invoices' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span data-i18n="invoices">Invoices</span>
                 </div>
-                <div onclick="window.location.href='faq_bot'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'faq' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='faq_bot'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'faq' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                     <span data-i18n="faq_bot">FAQ Bot</span>
                 </div>
-                <div onclick="window.location.href='voice_assistant'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'voice' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='voice_assistant'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'voice' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
                     <span data-i18n="voice_assistant">Voice Assistant</span>
                 </div>
-                <div onclick="window.location.href='marketing'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'marketing' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='marketing'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'marketing' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
                     <span data-i18n="marketing">Marketing</span>
                 </div>
-                <div onclick="window.location.href='progress'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'progress' ? 'active' : 'text-[#191a23]'}">
+                <div onclick="window.location.href='progress'" class="cursor-pointer nav-item flex items-center p-4 font-bold text-lg ${activePage === 'progress' ? 'active' : 'text-[var(--dark-black)]'}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     <span data-i18n="progress">My Progress</span>
                 </div>
             </nav>
 
             <div class="mt-auto space-y-4 pt-6 border-t border-gray-100">
-                <div class="p-4 border border-[#191a23] rounded-2xl bg-light-gray shadow-[4px_4px_0_#191a23]">
+                <div class="p-4 border border-[var(--dark-black)] rounded-2xl bg-light-gray shadow-[4px_4px_0_var(--dark-black)]">
                     <p class="text-xs text-gray-500 mb-2 uppercase tracking-wider font-extrabold">UI Language</p>
-                    <select onchange="setLanguage(this.value)" class="w-full bg-white border border-dark-black rounded-lg p-2 font-bold text-sm focus:outline-none">
+                    <select onchange="setLanguage(this.value)" class="w-full bg-white border border-[var(--dark-black)] rounded-lg p-2 font-bold text-sm focus:outline-none text-[var(--dark-black)]">
                         <option value="en" ${currentLang === 'en' ? 'selected' : ''}>English 🇺🇸</option>
                         <option value="hi" ${currentLang === 'hi' ? 'selected' : ''}>हिन्दी 🇮🇳</option>
                         <option value="ta" ${currentLang === 'ta' ? 'selected' : ''}>தமிழ் 🇮🇳</option>
@@ -219,11 +219,11 @@ function getSidebarHTML(activePage) {
                     </select>
                 </div>
 
-                <div onclick="window.location.href='profile'" class="block p-4 border border-[#191a23] rounded-2xl bg-[#f3f3f3] shadow-[4px_4px_0_#191a23] hover:bg-lime-green hover:-translate-y-1 hover:shadow-[6px_6px_0_#191a23] transition-all cursor-pointer group">
-                    <p class="text-xs text-gray-500 mb-1 uppercase tracking-wider font-extrabold group-hover:text-dark-black" data-i18n="logged_in_as">Logged in as</p>
-                    <p class="font-bold user-name truncate text-[#191a23] text-lg"></p>
+                <div onclick="window.location.href='profile'" class="block p-4 border border-[var(--dark-black)] rounded-2xl bg-white shadow-[4px_4px_0_var(--dark-black)] hover:bg-[var(--lime-green)] hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--dark-black)] transition-all cursor-pointer group">
+                    <p class="text-xs text-gray-500 mb-1 uppercase tracking-wider font-extrabold group-hover:text-[var(--dark-black)]" data-i18n="logged_in_as">Logged in as</p>
+                    <p class="font-bold user-name truncate text-[var(--dark-black)] text-lg"></p>
                 </div>
-                <button onclick="logout()" class="w-full flex items-center justify-center p-4 rounded-xl border border-dark-black bg-white text-dark-black hover:bg-red-50 hover:text-red-600 transition font-bold shadow-[4px_4px_0_#191a23] hover:shadow-none hover:translate-x-1 hover:translate-y-1">
+                <button onclick="logout()" class="w-full flex items-center justify-center p-4 rounded-xl border border-[var(--dark-black)] bg-white text-[var(--dark-black)] hover:bg-red-50 hover:text-red-600 transition font-bold shadow-[4px_4px_0_var(--dark-black)] hover:shadow-none hover:translate-x-1 hover:translate-y-1">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     <span data-i18n="logout">Logout</span>
                 </button>
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const waLink = 'https://wa.me/918292586501?text=Hi%20I%20need%20help%20with%20GrowGenie';
     const waButton = document.createElement('div');
     waButton.onclick = () => window.open(waLink, '_blank');
-    waButton.className = 'cursor-pointer fixed bottom-8 right-8 z-[999] w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[4px_4px_0_#191a23] hover:-translate-y-1 hover:shadow-[6px_6px_0_#191a23] transition-all border-2 border-dark-black';
+    waButton.className = 'cursor-pointer fixed bottom-8 right-8 z-[999] w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[4px_4px_0_var(--dark-black)] hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--dark-black)] transition-all border-2 border-[var(--dark-black)]';
     waButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>`;
     document.body.appendChild(waButton);
 });

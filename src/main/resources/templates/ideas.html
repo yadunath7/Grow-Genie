@@ -7,6 +7,13 @@
     <title>Grow Genie Planner | GrowGenie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
 </head>
 <body class="bg-white min-h-screen flex">
 
@@ -23,45 +30,28 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <!-- Left Section: Form & Navigation -->
-            <div class="flex flex-col space-y-8">
-                <!-- Tabs (Now on Left Side) -->
-                <div id="results-tabs" class="hidden flex flex-wrap items-center gap-3">
-                    <button onclick="switchTab('roadmap')" id="tab-roadmap" class="flex items-center space-x-2 px-6 py-3 bg-[#b9ff66] text-[#191a23] font-black rounded-2xl border-2 border-[#191a23] shadow-[4px_4px_0_#191a23] transition-all">
-                        <span>🗺️</span> <span>Roadmap</span>
-                    </button>
-                    <button onclick="switchTab('strategy')" id="tab-strategy" class="flex items-center space-x-2 px-6 py-3 bg-white text-[#191a23] font-bold rounded-2xl border-2 border-[#191a23] hover:bg-[#f3f3f3] transition-all">
-                        <span>📊</span> <span>Market Strategy</span>
-                    </button>
-                    <button onclick="switchTab('ads')" id="tab-ads" class="flex items-center space-x-2 px-6 py-3 bg-white text-[#191a23] font-bold rounded-2xl border-2 border-[#191a23] hover:bg-[#f3f3f3] transition-all">
-                        <span>📢</span> <span>Ads</span>
-                    </button>
-                    <button onclick="switchTab('product_desc')" id="tab-product_desc" class="flex items-center space-x-2 px-6 py-3 bg-white text-[#191a23] font-bold rounded-2xl border-2 border-[#191a23] hover:bg-[#f3f3f3] transition-all">
-                        <span>📝</span> <span>Product Desc</span>
-                    </button>
-                    <button onclick="switchTab('history')" id="tab-history" class="flex items-center space-x-2 px-6 py-3 bg-white text-[#191a23] font-bold rounded-2xl border-2 border-[#191a23] hover:bg-[#f3f3f3] transition-all">
-                        <span>🕐</span> <span>History</span>
-                    </button>
-                </div>
-
-                <!-- Form Section -->
-                <div class="card-positivus bg-light-gray premium-feature">
-                <h3 class="text-3xl font-bold mb-10" data-i18n="startup_details">Startup Details</h3>
-                <div id="msg-container" class="hidden p-4 rounded-2xl mb-8 font-bold text-center border-2 border-dark-black"></div>
+        <div class="flex flex-col gap-12 max-w-5xl mx-auto w-full">
+            <!-- Top Section: Form -->
+            <div class="card-positivus bg-light-gray premium-feature w-full p-6 md:p-8">
+                <h3 class="text-xl font-bold mb-4" data-i18n="startup_details">Startup Details</h3>
+                <div id="msg-container" class="hidden p-3 rounded-xl mb-4 font-bold text-center border-2 border-dark-black text-sm"></div>
                 
-                <form id="idea-form" class="space-y-8">
-                    <div>
-                        <label class="block text-xl font-bold mb-3" data-i18n="startup_name">Startup Name</label>
-                        <input type="text" id="idea_name" required class="input-positivus text-lg" placeholder="e.g. Aura Bottles" data-i18n-placeholder="startup_name_placeholder">
+                <form id="idea-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-sm font-bold mb-1" data-i18n="startup_name">Startup Name</label>
+                        <input type="text" id="idea_name" required class="input-positivus text-sm py-2" placeholder="e.g. ChaiVerse">
+                    </div>
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-sm font-bold mb-1" data-i18n="startup_idea">Startup Idea</label>
+                        <textarea id="startup_idea" required class="input-positivus text-sm h-16 py-2" placeholder="Describe what your business does..."></textarea>
                     </div>
                     <div>
-                        <label class="block text-xl font-bold mb-3" data-i18n="startup_idea">Startup Idea</label>
-                        <textarea id="startup_idea" required class="input-positivus text-lg h-32 py-4" placeholder="Describe what your business does..." data-i18n-placeholder="startup_idea_placeholder"></textarea>
+                        <label class="block text-sm font-bold mb-1">Business Location</label>
+                        <input type="text" id="location" required class="input-positivus text-sm py-2" placeholder="e.g. Alpha 2, Greater Noida">
                     </div>
                     <div>
-                        <label class="block text-xl font-bold mb-3" data-i18n="category">Category</label>
-                        <select id="category" required class="input-positivus text-lg appearance-none bg-white">
+                        <label class="block text-sm font-bold mb-1" data-i18n="category">Category</label>
+                        <select id="category" required class="input-positivus text-sm py-2 appearance-none bg-white">
                             <option value="Tech">Technology & SaaS</option>
                             <option value="E-commerce">E-commerce</option>
                             <option value="Food">Food & Beverage</option>
@@ -70,8 +60,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xl font-bold mb-3" data-i18n="budget_range">Budget Range (INR)</label>
-                        <select id="budget" required class="input-positivus text-lg appearance-none bg-white">
+                        <label class="block text-sm font-bold mb-1" data-i18n="budget_range">Budget Range (INR)</label>
+                        <select id="budget" required class="input-positivus text-sm py-2 appearance-none bg-white">
                             <option value="Under ₹50,000">Under ₹50,000 (Bootstrapped)</option>
                             <option value="₹50,000 - ₹5 Lakhs">₹50,000 - ₹5 Lakhs</option>
                             <option value="₹5 Lakhs - ₹20 Lakhs">₹5 Lakhs - ₹20 Lakhs</option>
@@ -79,8 +69,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xl font-bold mb-3" data-i18n="output_language">Output Language</label>
-                        <select id="output_lang" required class="input-positivus text-lg appearance-none bg-white border-2 border-dark-black shadow-[4px_4px_0_#b9ff66]">
+                        <label class="block text-sm font-bold mb-1" data-i18n="output_language">Output Language</label>
+                        <select id="output_lang" required class="input-positivus text-sm py-2 appearance-none bg-white border-2 border-dark-black shadow-[2px_2px_0_var(--lime-green)]">
                             <option value="English">English 🇺🇸</option>
                             <option value="Hindi">Hindi (हिन्दी) 🇮🇳</option>
                             <option value="Tamil">Tamil (தமிழ்) 🇮🇳</option>
@@ -88,15 +78,38 @@
                             <option value="Marathi">Marathi (मराठी) 🇮🇳</option>
                         </select>
                     </div>
-                    <button type="submit" id="generate-btn" class="w-full btn-positivus text-2xl py-6 mt-4">
-                        <svg class="w-8 h-8 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        <span data-i18n="generate_roadmap">Generate Roadmap</span>
-                    </button>
+                    <div class="col-span-1 md:col-span-2 mt-2">
+                        <button type="submit" id="generate-btn" class="w-full btn-positivus text-base py-3 flex justify-center items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span data-i18n="generate_roadmap">Generate Roadmap</span>
+                        </button>
+                    </div>
                 </form>
             </div>
-            </div> <!-- End Left Column -->
 
-            <!-- Right Section: Results -->
+            <!-- Middle Section: Tabs -->
+            <div id="results-tabs" class="hidden flex flex-wrap justify-center items-center gap-2">
+                <button onclick="switchTab('roadmap')" id="tab-roadmap" class="flex-shrink-0 flex items-center space-x-1 px-3 py-1.5 text-xs bg-[var(--lime-green)] text-[var(--dark-black)] font-black rounded-lg border-2 border-[var(--dark-black)] shadow-[2px_2px_0_var(--dark-black)] transition-all">
+                    <span>🗺️</span> <span>Roadmap</span>
+                </button>
+                <button onclick="switchTab('intelligence')" id="tab-intelligence" class="flex-shrink-0 flex items-center space-x-1 px-3 py-1.5 text-xs bg-white text-[var(--dark-black)] font-bold rounded-lg border-2 border-[var(--dark-black)] hover:bg-[#f3f3f3] transition-all">
+                    <span>📊</span> <span>Intelligence</span>
+                </button>
+                <button onclick="switchTab('strategy')" id="tab-strategy" class="flex-shrink-0 flex items-center space-x-1 px-3 py-1.5 text-xs bg-white text-[var(--dark-black)] font-bold rounded-lg border-2 border-[var(--dark-black)] hover:bg-[#f3f3f3] transition-all">
+                    <span>📈</span> <span>Strategy</span>
+                </button>
+                <button onclick="switchTab('ads')" id="tab-ads" class="flex-shrink-0 flex items-center space-x-1 px-3 py-1.5 text-xs bg-white text-[var(--dark-black)] font-bold rounded-lg border-2 border-[var(--dark-black)] hover:bg-[#f3f3f3] transition-all">
+                    <span>📢</span> <span>Ads</span>
+                </button>
+                <button onclick="switchTab('product_desc')" id="tab-product_desc" class="flex-shrink-0 flex items-center space-x-1 px-3 py-1.5 text-xs bg-white text-[var(--dark-black)] font-bold rounded-lg border-2 border-[var(--dark-black)] hover:bg-[#f3f3f3] transition-all">
+                    <span>📝</span> <span>Product</span>
+                </button>
+                <button onclick="switchTab('history')" id="tab-history" class="flex-shrink-0 flex items-center space-x-1 px-3 py-1.5 text-xs bg-white text-[var(--dark-black)] font-bold rounded-lg border-2 border-[var(--dark-black)] hover:bg-[#f3f3f3] transition-all">
+                    <span>🕐</span> <span>History</span>
+                </button>
+            </div>
+
+            <!-- Bottom Section: Results -->
             <div class="card-positivus lime flex flex-col premium-feature relative overflow-hidden" id="results-card">
                 
                 <div id="roadmap-result" class="flex-1 flex items-center justify-center border-2 border-dashed border-dark-black rounded-[45px] bg-white/30 p-4">
@@ -127,6 +140,7 @@
 
                 const idea_name = document.getElementById('idea_name').value;
                 const startup_idea = document.getElementById('startup_idea').value;
+                const location = document.getElementById('location').value;
                 const category = document.getElementById('category').value;
                 const budget = document.getElementById('budget').value;
                 const output_lang = document.getElementById('output_lang').value;
@@ -136,6 +150,7 @@
                 formData.append('action', 'generate');
                 formData.append('idea_name', idea_name);
                 formData.append('startup_idea', startup_idea);
+                formData.append('location', location);
                 formData.append('category', category);
                 formData.append('budget', budget);
                 formData.append('language', output_lang);
@@ -189,10 +204,12 @@
                     idea_name: idea.ideaName || idea.idea_name || 'Untitled Idea',
                     category: idea.category,
                     budget: idea.budget,
+                    location: idea.location || '',
                     roadmap: parsedData.roadmap || parsedData,
                     market_strategy: parsedData.market_strategy || "Strategy data not available for this older generation.",
                     ads: parsedData.ads || parsedData.ad_copy || { "Facebook": "Not available", "Instagram": "Not available", "Google": "Not available" },
-                    product_desc: parsedData.product_desc || "Product description not available."
+                    product_desc: parsedData.product_desc || "Product description not available.",
+                    market_intelligence: parsedData.market_intelligence || null
                 };
                 
                 switchTab('roadmap');
@@ -215,15 +232,15 @@
 
             window.switchTab = function(tabName) {
                 currentTab = tabName;
-                const tabs = ['roadmap', 'strategy', 'ads', 'product_desc', 'history'];
+                const tabs = ['roadmap', 'intelligence', 'strategy', 'ads', 'product_desc', 'history'];
                 
                 tabs.forEach(t => {
                     const el = document.getElementById(`tab-${t}`);
                     if (!el) return;
                     if (t === tabName) {
-                        el.className = 'flex items-center space-x-2 px-6 py-3 bg-[#b9ff66] text-[#191a23] font-black rounded-2xl border-2 border-[#191a23] shadow-[4px_4px_0_#191a23] transition-all';
+                        el.className = 'flex items-center space-x-2 px-6 py-3 bg-[var(--lime-green)] text-[var(--dark-black)] font-black rounded-2xl border-2 border-[var(--dark-black)] shadow-[4px_4px_0_var(--dark-black)] transition-all';
                     } else {
-                        el.className = 'flex items-center space-x-2 px-6 py-3 bg-white text-[#191a23] font-bold rounded-2xl border-2 border-[#191a23] hover:bg-[#f3f3f3] transition-all';
+                        el.className = 'flex items-center space-x-2 px-6 py-3 bg-white text-[var(--dark-black)] font-bold rounded-2xl border-2 border-[var(--dark-black)] hover:bg-[#f3f3f3] transition-all';
                     }
                 });
 
@@ -243,12 +260,13 @@
                         allPastIdeas.forEach((idea, index) => {
                             const date = idea.createdAt ? (Array.isArray(idea.createdAt) ? new Date(idea.createdAt[0], idea.createdAt[1]-1, idea.createdAt[2]).toLocaleDateString() : new Date(idea.createdAt).toLocaleDateString()) : 'Just now';
                             html += `
-                                <div class="card-positivus bg-light-gray border-2 border-dark-black p-5 rounded-xl hover:bg-white hover:shadow-[4px_4px_0_#191a23] transition-all cursor-pointer flex justify-between items-center gap-4" onclick="loadPastIdea(${index})">
+                                <div class="card-positivus bg-light-gray border-2 border-dark-black p-5 rounded-xl hover:bg-white hover:shadow-[4px_4px_0_var(--dark-black)] transition-all cursor-pointer flex justify-between items-center gap-4" onclick="loadPastIdea(${index})">
                                     <div class="flex-1 min-w-0">
                                         <h5 class="text-xl font-black uppercase text-dark-black mb-1 truncate">${idea.ideaName || idea.idea_name || 'Untitled Idea'}</h5>
                                         <div class="flex flex-wrap gap-2">
                                             <span class="text-xs font-bold bg-white px-2 py-0.5 rounded border border-dark-black">${idea.category}</span>
                                             <span class="text-xs font-bold bg-white px-2 py-0.5 rounded border border-dark-black whitespace-nowrap">${idea.budget}</span>
+                                            ${idea.location ? `<span class="text-xs font-bold bg-white px-2 py-0.5 rounded border border-dark-black truncate max-w-[120px]">📍 ${idea.location}</span>` : ''}
                                         </div>
                                     </div>
                                     <div class="text-sm font-bold text-gray-500 whitespace-nowrap flex-shrink-0">${date}</div>
@@ -266,12 +284,13 @@
                 resultContainer.className = 'w-full flex-1 pr-4 custom-scrollbar bg-white rounded-[30px] border-2 border-dark-black min-h-[600px]';
                 
                 let headerHtml = `
-                    <div class="sticky top-0 bg-white z-20 p-6 border-b-2 border-dark-black mb-6">
+                    <div class="sticky top-0 bg-white z-20 p-6 border-b-2 border-dark-black mb-6 text-dark-black">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-3xl font-black text-dark-black uppercase tracking-tighter">${currentRoadmapData.idea_name}</h4>
-                            <div class="flex space-x-3">
+                            <div class="flex flex-wrap gap-2">
                                 <span class="badge-lime text-xs font-bold uppercase border border-dark-black">${currentRoadmapData.category}</span>
                                 <span class="badge-lime text-xs font-bold uppercase border border-dark-black">${currentRoadmapData.budget}</span>
+                                ${currentRoadmapData.location ? `<span class="badge-lime text-xs font-bold uppercase border border-dark-black bg-lime-300">📍 ${currentRoadmapData.location}</span>` : ''}
                             </div>
                         </div>
                 `;
@@ -279,7 +298,7 @@
                 if (currentTab === 'roadmap') {
                     headerHtml += `
                         <div class="relative w-full py-8">
-                            <button onclick="renderRoadmapFilter('all')" id="filter-all" class="px-4 py-2 border-2 border-dark-black rounded-xl font-bold text-sm transition bg-lime-green shadow-[4px_4px_0_#191a23]">ALL STEPS</button>
+                            <button onclick="renderRoadmapFilter('all')" id="filter-all" class="px-4 py-2 border-2 border-dark-black rounded-xl font-bold text-sm transition bg-lime-green shadow-[4px_4px_0_var(--dark-black)]">ALL STEPS</button>
                             ${[1,2,3,4,5,6].map(m => `
                                 <button onclick="renderRoadmapFilter(${m})" id="filter-${m}" class="px-4 py-2 border-2 border-dark-black rounded-xl font-bold text-sm transition bg-white hover:bg-gray-50">STEP ${m}</button>
                             `).join('')}
@@ -312,8 +331,8 @@
 
                         contentHtml += `
                             <div class="roadmap-item w-full mb-10" data-phase="${phase.toLowerCase()}">
-                                <div class="card-positivus bg-light-gray/50 border-2 border-dark-black p-8 rounded-[25px] shadow-[6px_6px_0_#191a23] w-full relative">
-                                    <div class="absolute -top-6 -left-6 w-14 h-14 rounded-full bg-[#191a23] flex items-center justify-center text-[#b9ff66] font-black text-2xl border-2 border-[#191a23] shadow-[4px_4px_0_#b9ff66] z-10">${index + 1}</div>
+                                <div class="card-positivus bg-light-gray/50 border-2 border-dark-black p-8 rounded-[25px] shadow-[6px_6px_0_var(--dark-black)] w-full relative">
+                                    <div class="absolute -top-6 -left-6 w-14 h-14 rounded-full bg-[var(--dark-black)] flex items-center justify-center text-[var(--lime-green)] font-black text-2xl border-2 border-[var(--dark-black)] shadow-[4px_4px_0_var(--lime-green)] z-10">${index + 1}</div>
                                     <h4 class="text-2xl font-black text-dark-black mb-6 uppercase tracking-tight ml-4">${phase}</h4>
                                     <div class="bg-light-gray/50 p-6 rounded-xl border border-dashed border-dark-black/30 mt-4 ml-4">
                                         <div class="text-lg text-gray-800 leading-relaxed font-bold">${displayContent}</div>
@@ -322,9 +341,144 @@
                             </div>
                         `;
                     });
+                } else if (currentTab === 'intelligence') {
+                    if (!currentRoadmapData.market_intelligence) {
+                        contentHtml += `
+                            <div class="card-positivus bg-white border-2 border-dark-black p-8 rounded-[25px] shadow-[6px_6px_0_var(--dark-black)] text-center w-full">
+                                <span class="text-5xl block mb-4">📍</span>
+                                <h4 class="text-2xl font-black text-dark-black mb-4 uppercase">Market Intelligence Unavailable</h4>
+                                <p class="text-lg text-gray-600 font-bold mb-6">This plan was generated without a business location. Generate a new plan and specify your startup's business location to access premium local market insights.</p>
+                            </div>
+                        `;
+                    } else {
+                        const mi = currentRoadmapData.market_intelligence;
+                        
+                        const comps = mi.competitors || [];
+                        let compRows = '';
+                        if (comps.length === 0) {
+                            compRows = `<tr><td colspan="4" class="p-6 text-center text-gray-500 font-bold">No local competitors found.</td></tr>`;
+                        } else {
+                            comps.forEach(c => {
+                                const displayName = c.displayName || c.name || 'Unknown';
+                                const address = c.address || 'Address not available';
+                                const cityState = (c.city || c.state) ? `${c.city ? c.city + ', ' : ''}${c.state || ''}`.trim() : '';
+                                const fullAddress = cityState ? `${address}<br><span class="text-xs text-gray-500">${cityState}</span>` : address;
+                                const analysis = c.analysis || 'No detailed strategic advice available.';
+                                
+                                compRows += `
+                                    <tr class="border-b-2 border-dark-black hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-black text-dark-black text-lg">${displayName}</td>
+                                        <td class="p-4 font-medium text-gray-600 text-sm max-w-[200px]" title="${address}">${fullAddress}</td>
+                                        <td class="p-4 font-bold text-gray-800 text-sm max-w-[250px] leading-relaxed bg-lime-50/30">${analysis}</td>
+                                    </tr>
+                                `;
+                            });
+                        }
+
+                        const gapsHtml = (mi.market_gap_analysis || []).map(g => `
+                            <li class="flex items-start space-x-2 mb-3">
+                                <span class="flex-shrink-0 w-6 h-6 rounded-full bg-lime-100 border border-dark-black flex items-center justify-center text-xs">❗</span>
+                                <span class="font-bold text-gray-800">${g}</span>
+                            </li>
+                        `).join('');
+
+                        let launchRoadmapHtml = '';
+                        (mi.launch_roadmap || []).forEach((stage, idx) => {
+                            const tasksList = (stage.tasks || []).map(t => `<li class="ml-4 list-disc font-medium text-gray-700 text-sm mb-1">${t}</li>`).join('');
+                            launchRoadmapHtml += `
+                                <div class="relative pl-8 pb-8 last:pb-0">
+                                    <div class="absolute left-3.5 top-8 bottom-0 w-0.5 bg-dark-black last:hidden"></div>
+                                    <div class="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-lime-green border-2 border-dark-black flex items-center justify-center font-black text-dark-black shadow-[2px_2px_0_var(--dark-black)]">${idx + 1}</div>
+                                    
+                                    <h5 class="text-lg font-black text-dark-black uppercase mb-2 ml-2">${stage.phase}</h5>
+                                    <ul class="space-y-1 text-gray-800 ml-2">
+                                        ${tasksList}
+                                    </ul>
+                                </div>
+                            `;
+                        });
+
+                        contentHtml += `
+                            <!-- TOP SECTION: USP & Pricing -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 w-full">
+                                <!-- Recommended USP -->
+                                <div class="card-positivus bg-lime-green/20 border-2 border-dark-black p-6 rounded-[25px] flex flex-col justify-between shadow-[4px_4px_0_var(--dark-black)]">
+                                    <div>
+                                        <h4 class="text-lg font-black uppercase text-dark-black mb-2">Recommended USP</h4>
+                                        <blockquote class="text-xl font-black italic text-dark-black leading-relaxed mt-4">
+                                            "${mi.usp_recommendations}"
+                                        </blockquote>
+                                    </div>
+                                    <div class="text-xs font-black uppercase tracking-tight text-gray-600 mt-4">★ McKinsey-Style Competitive Positioning</div>
+                                </div>
+                                
+                                <!-- Pricing Strategy -->
+                                <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] flex flex-col justify-between shadow-[4px_4px_0_var(--dark-black)]">
+                                    <h4 class="text-lg font-black uppercase text-dark-black mb-4">Pricing Strategy</h4>
+                                    <p class="text-base text-gray-800 leading-relaxed font-bold whitespace-pre-line">${mi.pricing_strategy}</p>
+                                </div>
+                            </div>
+
+                            <!-- COMPETITOR ANALYSIS TABLE -->
+                            <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] shadow-[6px_6px_0_var(--dark-black)] mb-8 overflow-hidden w-full">
+                                <h4 class="text-2xl font-black text-dark-black uppercase mb-6 flex items-center justify-between">
+                                    <span>📍 Local Competitor Analysis</span>
+                                    <span class="text-xs font-bold bg-lime-green px-3 py-1 border border-dark-black rounded-lg">OpenStreetMap Data</span>
+                                </h4>
+                                <div class="overflow-x-auto w-full custom-scrollbar">
+                                    <table class="w-full text-left border-collapse border-2 border-dark-black">
+                                        <thead>
+                                            <tr class="bg-light-gray border-b-2 border-dark-black">
+                                                <th class="p-4 font-black uppercase text-sm border-r-2 border-dark-black">Competitor</th>
+                                                <th class="p-4 font-black uppercase text-sm border-r-2 border-dark-black">Address</th>
+                                                <th class="p-4 font-black uppercase text-sm bg-lime-green/20">Strategic Advisory</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${compRows}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- MIDDLE GRID: Market Gaps & Acquisition -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 w-full">
+                                <!-- Market Gaps -->
+                                <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] shadow-[4px_4px_0_var(--dark-black)]">
+                                    <h4 class="text-2xl font-black text-dark-black uppercase mb-4">🎯 Market Gaps & Opportunities</h4>
+                                    <ul class="space-y-1">
+                                        ${gapsHtml}
+                                    </ul>
+                                </div>
+
+                                <!-- Customer Acquisition -->
+                                <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] shadow-[4px_4px_0_var(--dark-black)]">
+                                    <h4 class="text-2xl font-black text-dark-black uppercase mb-4">🧲 Customer Acquisition</h4>
+                                    <p class="text-base text-gray-800 leading-relaxed font-bold whitespace-pre-line">${mi.customer_acquisition_strategy}</p>
+                                </div>
+                            </div>
+
+                            <!-- COMPETITIVE STRATEGY & LAUNCH ROADMAP -->
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 w-full">
+                                <!-- Strategy -->
+                                <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] shadow-[6px_6px_0_var(--dark-black)] md:col-span-3">
+                                    <h4 class="text-2xl font-black text-dark-black uppercase mb-6">⚔️ Competitor Analysis</h4>
+                                    <p class="text-base text-gray-800 leading-relaxed font-bold whitespace-pre-line">${mi.competitor_analysis}</p>
+                                </div>
+
+                                <!-- Local Launch Timeline -->
+                                <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] shadow-[6px_6px_0_var(--dark-black)] md:col-span-2">
+                                    <h4 class="text-2xl font-black text-dark-black uppercase mb-6">🚀 Location-Specific Roadmap</h4>
+                                    <div class="mt-4">
+                                        ${launchRoadmapHtml}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
                 } else if (currentTab === 'strategy') {
                     contentHtml += `
-                        <div class="card-positivus bg-white border-2 border-dark-black p-8 rounded-[25px] shadow-[6px_6px_0_#191a23]">
+                        <div class="card-positivus bg-white border-2 border-dark-black p-8 rounded-[25px] shadow-[6px_6px_0_var(--dark-black)] w-full">
                             <h4 class="text-2xl font-black text-dark-black mb-6 uppercase tracking-tight">Market Strategy & Positioning</h4>
                             <p class="text-lg text-gray-800 leading-relaxed font-medium whitespace-pre-line">${currentRoadmapData.market_strategy}</p>
                         </div>
@@ -337,26 +491,33 @@
                         if (platform.toLowerCase().includes('instagram')) icon = '📸';
                         if (platform.toLowerCase().includes('google')) icon = '🔍';
 
+                        let displayCopy = '';
+                        if (typeof copy === 'object' && copy !== null) {
+                            displayCopy = Object.entries(copy).map(([k, v]) => `<b>${k.replace(/_/g, ' ').toUpperCase()}:</b> ${v}`).join('<br><br>');
+                        } else {
+                            displayCopy = copy;
+                        }
+
                         contentHtml += `
-                            <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] shadow-[4px_4px_0_#191a23] mb-6">
+                            <div class="card-positivus bg-white border-2 border-dark-black p-6 rounded-[25px] shadow-[4px_4px_0_var(--dark-black)] mb-6 w-full">
                                 <div class="flex items-center space-x-3 mb-4">
                                     <div class="w-10 h-10 bg-light-gray border-2 border-dark-black rounded-full flex items-center justify-center text-xl">${icon}</div>
                                     <h4 class="text-xl font-black text-dark-black uppercase tracking-tight">${platform}</h4>
                                 </div>
                                 <div class="bg-light-gray/50 p-4 rounded-xl border border-dashed border-dark-black/30">
-                                    <p class="text-lg text-gray-800 leading-relaxed font-bold whitespace-pre-line">${copy}</p>
+                                    <p class="text-lg text-gray-800 leading-relaxed font-medium">${displayCopy}</p>
                                 </div>
                             </div>
                         `;
                     }
                 } else if (currentTab === 'product_desc') {
                     contentHtml += `
-                        <div class="card-positivus bg-white border-2 border-dark-black p-8 rounded-[25px] shadow-[6px_6px_0_#191a23]">
+                        <div class="card-positivus bg-white border-2 border-dark-black p-8 rounded-[25px] shadow-[6px_6px_0_var(--dark-black)] w-full">
                             <h4 class="text-2xl font-black text-dark-black mb-6 uppercase tracking-tight">SEO Product/Service Description</h4>
                             <div class="bg-light-gray p-6 rounded-xl border-2 border-dark-black">
                                 <p class="text-lg text-gray-800 leading-relaxed font-medium whitespace-pre-line">${currentRoadmapData.product_desc}</p>
                             </div>
-                            <button onclick="navigator.clipboard.writeText(\`${currentRoadmapData.product_desc.replace(/`/g, '\\`')}\`); alert('Copied!');" class="mt-6 px-6 py-3 bg-lime-green border-2 border-dark-black text-dark-black rounded-xl font-black uppercase hover:-translate-y-1 hover:shadow-[4px_4px_0_#191a23] transition-all">Copy Description</button>
+                            <button onclick="navigator.clipboard.writeText(\`${currentRoadmapData.product_desc.replace(/`/g, '\\`')}\`); alert('Copied!');" class="mt-6 px-6 py-3 bg-lime-green border-2 border-dark-black text-dark-black rounded-xl font-black uppercase hover:-translate-y-1 hover:shadow-[4px_4px_0_var(--dark-black)] transition-all">Copy Description</button>
                         </div>
                     `;
                 }
@@ -370,7 +531,7 @@
                     const btn = document.getElementById(`filter-${m}`);
                     if (!btn) return;
                     if (m === filter) {
-                        btn.className = 'px-4 py-2 border-2 border-dark-black rounded-xl font-bold text-sm transition bg-lime-green shadow-[4px_4px_0_#191a23]';
+                        btn.className = 'px-4 py-2 border-2 border-dark-black rounded-xl font-bold text-sm transition bg-lime-green shadow-[4px_4px_0_var(--dark-black)]';
                     } else {
                         btn.className = 'px-4 py-2 border-2 border-dark-black rounded-xl font-bold text-sm transition bg-white hover:bg-gray-50';
                     }

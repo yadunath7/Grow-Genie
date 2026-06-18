@@ -14,6 +14,10 @@ public class MailService {
     private JavaMailSender javaMailSender;
 
     public boolean sendMail(String to, String subject, String body) {
+        return sendMailWithAttachment(to, subject, body, null, null);
+    }
+
+    public boolean sendMailWithAttachment(String to, String subject, String body, String attachmentFilename, byte[] attachmentData) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -21,7 +25,11 @@ public class MailService {
             helper.setFrom("adzitech@gmail.com");
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(body, true); // true indicates HTML content
+            helper.setText(body, true);
+
+            if (attachmentFilename != null && attachmentData != null) {
+                helper.addAttachment(attachmentFilename, new org.springframework.core.io.ByteArrayResource(attachmentData));
+            }
 
             javaMailSender.send(message);
             return true;

@@ -7,6 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Map;
+import java.util.HashMap;
+import com.growgenie.app.repository.UserRepository;
+import com.growgenie.app.repository.OrderRepository;
+import com.growgenie.app.repository.PlatformProductRepository;
 
 @Controller
 public class WebController {
@@ -19,6 +27,15 @@ public class WebController {
 
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private PlatformProductRepository platformProductRepository;
 
     @GetMapping({"/", "/index"})
     public String index(Model model) {
@@ -91,6 +108,85 @@ public class WebController {
     @GetMapping({"/verify"})
     public String verify() {
         return "verify";
+    }
+
+    @PostMapping("/verify")
+    @ResponseBody
+    public Map<String, Object> verifyPayment(
+            @RequestParam("razorpay_payment_id") String paymentId,
+            @RequestParam("type") String type,
+            @RequestParam("amount") Double amount,
+            @RequestParam(value = "plan_name", required = false) String planName,
+            @RequestParam(value = "days", required = false) Integer days,
+            @RequestParam(value = "product_ids", required = false) String productIds,
+            jakarta.servlet.http.HttpServletRequest request) {
+
+        Map<String, Object> response = new HashMap<>();
+        jakarta.servlet.http.HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user_id") == null) {
+            response.put("status", "error");
+            response.put("message", "Unauthorized");
+            return response;
+        }
+        Long userId = (Long) session.getAttribute("user_id");
+
+        if ("subscription".equals(type)) {
+            com.growgenie.app.entity.User user = userRepository.findById(userId).orElse(null);
+            if (user != null) {
+                user.setSubscriptionStatus("premium");
+                java.time.LocalDate newExpiry = java.time.LocalDate.now().plusDays(days != null ? days : 30);
+                user.setTrialEndDate(newExpiry);
+                userRepository.save(user);
+
+                com.growgenie.app.entity.Order order = new com.growgenie.app.entity.Order();
+                order.setUserId(userId);
+                order.setItemType("subscription");
+                order.setItemId(0L);
+                order.setAmount(amount);
+                order.setPaymentId(paymentId);
+                order.setCreatedAt(java.time.LocalDateTime.now());
+                orderRepository.save(order);
+
+                session.setAttribute("subscription_status", "premium");
+
+                response.put("status", "success");
+                response.put("message", "Subscription verified and upgraded.");
+            } else {
+                response.put("status", "error");
+                response.put("message", "User not found.");
+            }
+        } else if ("product".equals(type)) {
+            if (productIds != null && !productIds.isEmpty()) {
+                String[] pIds = productIds.split(",");
+                for (String pIdStr : pIds) {
+                    try {
+                        Long pId = Long.parseLong(pIdStr.trim());
+                        com.growgenie.app.entity.PlatformProduct p = platformProductRepository.findById(pId).orElse(null);
+                        if (p != null) {
+                            com.growgenie.app.entity.Order order = new com.growgenie.app.entity.Order();
+                            order.setUserId(userId);
+                            order.setItemType("product");
+                            order.setItemId(pId);
+                            order.setAmount(p.getPrice());
+                            order.setPaymentId(paymentId);
+                            order.setCreatedAt(java.time.LocalDateTime.now());
+                            orderRepository.save(order);
+                        }
+                    } catch (Exception ex) {
+                        // ignore malformed product ids
+                    }
+                }
+                response.put("status", "success");
+                response.put("message", "Product purchase verified.");
+            } else {
+                response.put("status", "error");
+                response.put("message", "No product IDs provided.");
+            }
+        } else {
+            response.put("status", "error");
+            response.put("message", "Unknown purchase type.");
+        }
+        return response;
     }
 
     @GetMapping({"/voice_assistant"})
