@@ -13,29 +13,24 @@ public class MailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public boolean sendMail(String to, String subject, String body) {
+    public boolean sendMail(String to, String subject, String body) throws Exception {
         return sendMailWithAttachment(to, subject, body, null, null);
     }
 
-    public boolean sendMailWithAttachment(String to, String subject, String body, String attachmentFilename, byte[] attachmentData) {
-        try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            
-            helper.setFrom("adzitech@gmail.com");
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(body, true);
+    public boolean sendMailWithAttachment(String to, String subject, String body, String attachmentFilename, byte[] attachmentData) throws Exception {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        
+        helper.setFrom("adzitech@gmail.com");
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body, true);
 
-            if (attachmentFilename != null && attachmentData != null) {
-                helper.addAttachment(attachmentFilename, new org.springframework.core.io.ByteArrayResource(attachmentData));
-            }
-
-            javaMailSender.send(message);
-            return true;
-        } catch (MessagingException | org.springframework.mail.MailException e) {
-            System.err.println("Failed to send email: " + e.getMessage());
-            return false;
+        if (attachmentFilename != null && attachmentData != null) {
+            helper.addAttachment(attachmentFilename, new org.springframework.core.io.ByteArrayResource(attachmentData));
         }
+
+        javaMailSender.send(message);
+        return true;
     }
 }
