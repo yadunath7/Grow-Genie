@@ -101,7 +101,7 @@ public class InvoiceController {
                     } catch (Exception mailEx) {
                         System.err.println("Email delivery failed: " + mailEx.getMessage());
                         response.put("status", "success");
-                        response.put("message", "Invoice generated and saved! Note: Auto-email via Resend failed (likely since recipient is not verified in sandbox). You can attach the downloaded PDF manually.");
+                        response.put("message", "Invoice generated and saved! Note: Auto-email via Brevo failed: " + mailEx.getMessage() + ". You can attach the downloaded PDF manually.");
                         return response;
                     }
                 }
