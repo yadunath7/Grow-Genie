@@ -22,9 +22,14 @@
 
     <main class="flex-1 ml-64 p-8 md:p-12 min-h-screen relative overflow-x-hidden">
         <header class="flex justify-between items-center mb-12">
-            <div>
-                <h2 class="text-5xl font-bold mb-2"><span data-i18n="performance">Performance</span> <span class="text-lime-green" data-i18n="report">Report</span></h2>
-                <p class="text-xl text-gray-600 font-medium" data-i18n="progress_desc">Deep dive into your startup's growth and engagement.</p>
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="sidebar-toggle bg-white border-dark-black text-dark-black mr-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <div>
+                    <h2 class="text-5xl font-bold mb-2"><span data-i18n="performance">Performance</span> <span class="text-lime-green" data-i18n="report">Report</span></h2>
+                    <p class="text-xl text-gray-600 font-medium" data-i18n="progress_desc">Deep dive into your startup's growth and engagement.</p>
+                </div>
             </div>
             <div class="badge-lime text-lg px-6 py-2 border-2 border-dark-black shadow-[4px_4px_0_#000]" data-i18n="live_data">Live Data</div>
         </header>

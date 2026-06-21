@@ -24,9 +24,14 @@
 
     <main class="flex-1 ml-64 p-8 md:p-12 min-h-screen relative">
         <header class="flex justify-between items-center mb-12">
-            <div>
-                <h2 class="text-5xl font-black mb-2 uppercase tracking-tight" data-i18n="invoices">Invoice Generator</h2>
-                <p class="text-xl text-gray-600 font-medium italic" data-i18n="invoice_gen_desc">GST-compliant PDF invoices for your business.</p>
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="sidebar-toggle bg-white border-dark-black text-dark-black mr-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <div>
+                    <h2 class="text-5xl font-black mb-2 uppercase tracking-tight" data-i18n="invoices">Invoice Generator</h2>
+                    <p class="text-xl text-gray-600 font-medium italic" data-i18n="invoice_gen_desc">GST-compliant PDF invoices for your business.</p>
+                </div>
             </div>
             <button onclick="openInvoiceModal()" class="btn-positivus bg-lime-green px-8 py-4 text-xl flex items-center space-x-3">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
