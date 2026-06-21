@@ -6,6 +6,7 @@
     <title>My Profile | GrowGenie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style th:if="${theme_primary != null}">
         :root {
@@ -59,7 +60,7 @@
                         <p id="profile-plan-expiry" class="text-xl font-bold text-dark-black">-</p>
                     </div>
 
-                    <a href="dashboard?upgrade=true" class="btn-positivus bg-dark-black text-white hover:bg-lime-green hover:text-dark-black transition shadow-[4px_4px_0_var(--lime-green)] w-full mt-8 block text-center">Upgrade Plan</a>
+                    <button onclick="openUpgradeModal()" class="btn-positivus bg-dark-black text-white hover:bg-lime-green hover:text-dark-black transition shadow-[4px_4px_0_var(--lime-green)] w-full mt-8 block text-center font-bold">Upgrade Plan</button>
                 </div>
 
                 <!-- Theme settings card -->
@@ -124,6 +125,52 @@
             </div>
         </div>
     </main>
+
+    <!-- Upgrade Modal -->
+    <div id="upgrade-modal" class="fixed inset-0 bg-dark-black/80 backdrop-blur-md z-[150] hidden flex items-center justify-center p-4">
+        <div class="card-positivus bg-white w-full max-w-5xl overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-center mb-10">
+                <h3 class="text-4xl font-black uppercase">Choose Your Growth Plan</h3>
+                <button onclick="closeUpgradeModal()" class="text-gray-400 hover:text-dark-black transition">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 p-4 pt-10">
+                
+                    <div th:each="plan : ${subscription_plans}" class="card-positivus border-2 border-dark-black flex flex-col justify-between hover:scale-105 transition-transform duration-300 bg-white h-full shadow-[8px_8px_0_var(--dark-black)] relative">
+                        
+                            <div th:if="${plan.badgeText != null && !plan.badgeText.isEmpty()}" class="absolute -top-4 left-1/2 -translate-x-1/2 badge-lime text-[10px] font-bold uppercase py-1 px-4 border border-dark-black shadow-[4px_4px_0_#000]" th:text="${plan.badgeText}">
+                            </div>
+                        
+                        <div>
+                            <h4 class="text-2xl font-bold mb-2 text-dark-black" th:text="${plan.name}"></h4>
+                            <p class="text-5xl font-black mb-6 text-dark-black">₹<span th:text="${plan.price}"></span><span class="text-lg text-gray-500 font-medium">/</span><span class="text-lg text-gray-500 font-medium" th:text="${plan.durationText}"></span></p>
+                            <ul class="space-y-3 mb-8 font-medium text-gray-600">
+                                <li th:each="feature : ${#strings.arraySplit(plan.features, ',')}" class="flex items-center"><svg class="w-5 h-5 text-lime-green mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> <span th:text="${feature}"></span></li>
+                            </ul>
+                        </div>
+                        <button th:data-plan="${plan.name}" th:data-price="${plan.price}" onclick="simulateUpgrade(this.getAttribute('data-plan'), parseFloat(this.getAttribute('data-price')), 30)" class="btn-positivus w-full bg-dark-black text-white hover:bg-lime-green hover:text-dark-black transition border-2 border-dark-black shadow-[4px_4px_0_var(--lime-green)]">Select Plan</button>
+                    </div>
+                    
+                
+                    <div th:if="${#lists.isEmpty(subscription_plans)}" class="col-span-3 text-center text-gray-400 italic py-12">No subscription plans available at the moment.</div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-dark-black/90 backdrop-blur-xl z-[200] hidden flex items-center justify-center p-4 text-center">
+        <div class="card-positivus bg-white p-16 max-w-xl">
+            <div class="w-24 h-24 bg-lime-green border-4 border-dark-black rounded-full flex items-center justify-center mx-auto mb-8 shadow-[8px_8px_0_var(--dark-black)] animate-bounce">
+                <svg class="w-12 h-12 text-dark-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-4xl font-black mb-4">PLAN ACTIVATED!</h3>
+            <p class="text-xl text-gray-600 mb-10">Welcome to the <span id="activated-plan" class="font-bold text-dark-black">Pro</span> tier. Your account has been upgraded successfully.</p>
+            <button onclick="window.location.reload()" class="btn-positivus w-full py-5 text-xl bg-lime-green shadow-[8px_8px_0_var(--dark-black)]">Back to Profile</button>
+        </div>
+    </div>
 
     <script src="assets/js/app.js"></script>
     <script>
@@ -261,6 +308,59 @@
             } catch (e) {
                 console.error("Failed to load history", e);
             }
+        }
+
+        function openUpgradeModal() {
+            document.getElementById('upgrade-modal').classList.remove('hidden');
+        }
+
+        function closeUpgradeModal() {
+            document.getElementById('upgrade-modal').classList.add('hidden');
+        }
+
+        function simulateUpgrade(planName, price, days) {
+            const rzp_key = "rzp_test_SjRPQ06Qae73n3";
+            const amount = price * 100; // Convert to paise
+
+            const options = {
+                "key": rzp_key,
+                "amount": amount,
+                "currency": "INR",
+                "name": "GrowGenie",
+                "description": `Upgrade to ${planName}`,
+                "image": "assets/img/logo.png",
+                "handler": function (response) {
+                    // Send to backend for verification
+                    fetch('verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `razorpay_payment_id=${response.razorpay_payment_id}&type=subscription&amount=${price}&plan_name=${encodeURIComponent(planName)}&days=${days}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            closeUpgradeModal();
+                            document.getElementById('activated-plan').textContent = planName;
+                            document.getElementById('success-modal').classList.remove('hidden');
+                            // Optional: reload after a delay
+                            setTimeout(() => window.location.reload(), 3000);
+                        } else {
+                            alert("Verification Failed: " + data.message);
+                        }
+                    })
+                    .catch(err => alert("System Error: " + err));
+                },
+                "prefill": {
+                    "name": document.getElementById('profile-name').textContent || "",
+                },
+                "theme": { "color": "[[${theme_primary} != null ? ${theme_primary} : 'var(--lime-green)' ]]" }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response){
+                alert("Payment Failed: " + response.error.description);
+            });
+            rzp.open();
         }
     </script>
 </body>

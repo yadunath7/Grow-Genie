@@ -96,7 +96,8 @@ public class WebController {
     }
 
     @GetMapping({"/profile"})
-    public String profile() {
+    public String profile(Model model) {
+        model.addAttribute("subscription_plans", subscriptionPlanRepository.findAll());
         return "profile";
     }
 
