@@ -11,7 +11,10 @@ import java.util.*;
 public class MailService {
 
     @Value("${brevo.api.key}")
-    private String brevoApiKey;
+    private String envBrevoApiKey;
+
+    @org.springframework.beans.factory.annotation.Autowired
+    private SettingsService settingsService;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -25,8 +28,10 @@ public class MailService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         
+        String dbApiKey = settingsService != null ? settingsService.getSetting("brevo_api_key", null) : null;
+        String finalApiKey = (dbApiKey != null && !dbApiKey.trim().isEmpty()) ? dbApiKey : envBrevoApiKey;
         // Clean the API key of any leading/trailing spaces or carriage returns
-        String cleanApiKey = brevoApiKey != null ? brevoApiKey.trim().replaceAll("[\\r\\n]", "") : "";
+        String cleanApiKey = finalApiKey != null ? finalApiKey.trim().replaceAll("[\\r\\n]", "") : "";
         headers.set("api-key", cleanApiKey);
 
         Map<String, Object> payload = new HashMap<>();
