@@ -241,50 +241,66 @@ function renderSidebar(activePage) {
 }
 
 // Add global floating WhatsApp button
-document.addEventListener('DOMContentLoaded', () => {
-    const waLink = 'https://wa.me/918292586501?text=Hi%20I%20need%20help%20with%20GrowGenie';
-    const waButton = document.createElement('div');
-    waButton.onclick = () => window.open(waLink, '_blank');
-    waButton.className = 'cursor-pointer fixed bottom-8 right-8 z-[999] w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[4px_4px_0_var(--dark-black)] hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--dark-black)] transition-all border-2 border-[var(--dark-black)]';
-    waButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>`;
-    document.body.appendChild(waButton);
+// Inject Hotwire Turbo for instant SPA-like page transitions
+const turboScript = document.createElement('script');
+turboScript.type = 'module';
+turboScript.src = 'https://cdn.skypack.dev/@hotwired/turbo';
+document.head.appendChild(turboScript);
 
-    // Inject CSS for loading bar
-    const style = document.createElement('style');
-    style.textContent = `
-        #global-loader {
-            position: fixed; top: 0; left: 0; width: 0%; height: 5px;
-            background-color: var(--lime-green, #b9ff66);
-            z-index: 99999;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 15px var(--lime-green, #b9ff66);
-            pointer-events: none;
-        }
-        .loading-active #global-loader { width: 85%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-    `;
-    document.head.appendChild(style);
+function initGlobalUI() {
+    // Check if WhatsApp button already exists to prevent duplicates
+    if (!document.getElementById('wa-floating-btn')) {
+        const waLink = 'https://wa.me/918292586501?text=Hi%20I%20need%20help%20with%20GrowGenie';
+        const waButton = document.createElement('div');
+        waButton.id = 'wa-floating-btn';
+        waButton.onclick = () => window.open(waLink, '_blank');
+        waButton.className = 'cursor-pointer fixed bottom-8 right-8 z-[999] w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[4px_4px_0_var(--dark-black)] hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--dark-black)] transition-all border-2 border-[var(--dark-black)]';
+        waButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>`;
+        document.body.appendChild(waButton);
+    }
 
-    // Create loader element
-    const loader = document.createElement('div');
-    loader.id = 'global-loader';
-    document.body.appendChild(loader);
+    if (!document.getElementById('global-loader-style')) {
+        const style = document.createElement('style');
+        style.id = 'global-loader-style';
+        style.textContent = `
+            #global-loader {
+                position: fixed; top: 0; left: 0; width: 0%; height: 5px;
+                background-color: var(--lime-green, #b9ff66);
+                z-index: 99999;
+                transition: width 0.3s ease;
+                box-shadow: 0 0 15px var(--lime-green, #b9ff66);
+                pointer-events: none;
+            }
+            .loading-active #global-loader { width: 85%; animation: pulse 1.5s infinite; }
+            @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        `;
+        document.head.appendChild(style);
+    }
 
-    // Function to trigger loader
+    if (!document.getElementById('global-loader')) {
+        const loader = document.createElement('div');
+        loader.id = 'global-loader';
+        document.body.appendChild(loader);
+    }
+
     const triggerLoader = () => document.body.classList.add('loading-active');
 
-    // Attach to all internal links
     document.querySelectorAll('a').forEach(link => {
         if (link.href && link.href.startsWith(window.location.origin) && !link.href.includes('#')) {
             link.addEventListener('click', triggerLoader);
         }
     });
 
-    // Listen for beforeunload to ensure loader always shows when page is leaving
     window.addEventListener('beforeunload', triggerLoader);
+    document.addEventListener('turbo:before-visit', triggerLoader);
 
-    // Intercept form submissions
     document.querySelectorAll('form').forEach(form => {
         form.addEventListener('submit', triggerLoader);
     });
-});
+    
+    // Disable loader when turbo renders
+    document.body.classList.remove('loading-active');
+}
+
+document.addEventListener('DOMContentLoaded', initGlobalUI);
+document.addEventListener('turbo:load', initGlobalUI);
