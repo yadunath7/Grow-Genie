@@ -58,7 +58,7 @@ public class BusinessProfileController {
             }
             return response;
         } else if ("save".equals(action)) {
-            String uploadDir = "src/main/resources/static/uploads/profiles/";
+            String uploadDir = "uploads/profiles/";
             File directory = new File(uploadDir);
             if (!directory.exists()) {
                 directory.mkdirs();

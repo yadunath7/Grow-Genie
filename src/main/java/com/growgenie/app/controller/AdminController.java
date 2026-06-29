@@ -152,7 +152,7 @@ public class AdminController {
         product.setCreatedAt(LocalDateTime.now());
         
         if (!image.isEmpty()) {
-            String uploadDir = "src/main/resources/static/uploads/";
+            String uploadDir = "uploads/";
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
@@ -219,7 +219,7 @@ public class AdminController {
         member.setCreatedAt(LocalDateTime.now());
 
         if (!image.isEmpty()) {
-            String uploadDir = "src/main/resources/static/uploads/";
+            String uploadDir = "uploads/";
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
