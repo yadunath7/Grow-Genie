@@ -15,5 +15,4 @@ WORKDIR /app
 COPY --from=build-env /app/target/*.jar app.jar
 # Expose the default port
 EXPOSE 8080
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx300m", "-Xss512k", "-XX:CICompilerCount=2", "-Dfile.encoding=UTF-8", "-jar", "app.jar"]
