@@ -31,39 +31,24 @@ public class GlobalControllerAdvice {
         return settingsService.getSetting("ui_theme", "classic");
     }
 
-    @ModelAttribute("theme_primary")
-    public String getThemePrimary() {
+    @ModelAttribute
+    public void addThemeAttributes(org.springframework.ui.Model model) {
         String theme = getCurrentTheme();
+        String primary, secondary, filter;
         switch (theme) {
-            case "ocean_blue": return "#00f2fe";
-            case "cyberpunk": return "#c084fc";
-            case "sunset": return "#fb923c";
-            case "ruby_red": return "#ef4444";
-            default: return "#b9ff66";
+            case "ocean_blue": 
+                primary = "#00f2fe"; secondary = "#0f172a"; filter = "hue-rotate(95deg)"; break;
+            case "cyberpunk": 
+                primary = "#c084fc"; secondary = "#09090b"; filter = "hue-rotate(182deg)"; break;
+            case "sunset": 
+                primary = "#fb923c"; secondary = "#1c1917"; filter = "hue-rotate(299deg)"; break;
+            case "ruby_red": 
+                primary = "#ef4444"; secondary = "#450a0a"; filter = "hue-rotate(272deg)"; break;
+            default: 
+                primary = "#b9ff66"; secondary = "#191a23"; filter = "hue-rotate(0deg)"; break;
         }
-    }
-
-    @ModelAttribute("theme_secondary")
-    public String getThemeSecondary() {
-        String theme = getCurrentTheme();
-        switch (theme) {
-            case "ocean_blue": return "#0f172a";
-            case "cyberpunk": return "#09090b";
-            case "sunset": return "#1c1917";
-            case "ruby_red": return "#450a0a";
-            default: return "#191a23";
-        }
-    }
-
-    @ModelAttribute("theme_filter")
-    public String getThemeFilter() {
-        String theme = getCurrentTheme();
-        switch (theme) {
-            case "ocean_blue": return "hue-rotate(95deg)";
-            case "cyberpunk": return "hue-rotate(182deg)";
-            case "sunset": return "hue-rotate(299deg)";
-            case "ruby_red": return "hue-rotate(272deg)";
-            default: return "hue-rotate(0deg)";
-        }
+        model.addAttribute("theme_primary", primary);
+        model.addAttribute("theme_secondary", secondary);
+        model.addAttribute("theme_filter", filter);
     }
 }
