@@ -17,10 +17,19 @@ public class SettingsService {
     @Autowired
     private SettingRepository settingRepository;
 
+    @Autowired
+    private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+
     private final Map<String, String> settingsCache = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
+        try {
+            jdbcTemplate.execute("ALTER TABLE platform_products MODIFY description TEXT");
+            jdbcTemplate.execute("ALTER TABLE team_members MODIFY description TEXT");
+        } catch (Exception e) {
+            System.out.println("Could not alter tables, they may already be updated or not exist yet: " + e.getMessage());
+        }
         refreshCache();
     }
 

@@ -166,15 +166,20 @@ public class AdminController {
         product.setCreatedAt(LocalDateTime.now());
         
         if (!image.isEmpty()) {
-            String uploadDir = "uploads/";
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            try {
+                String uploadDir = "uploads/";
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                Path filePath = uploadPath.resolve(filename);
+                Files.copy(image.getInputStream(), filePath);
+                product.setImageUrl("/uploads/" + filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+                product.setImageUrl("");
             }
-            String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(image.getInputStream(), filePath);
-            product.setImageUrl("/uploads/" + filename);
         } else {
             product.setImageUrl("");
         }
@@ -233,15 +238,20 @@ public class AdminController {
         member.setCreatedAt(LocalDateTime.now());
 
         if (!image.isEmpty()) {
-            String uploadDir = "uploads/";
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            try {
+                String uploadDir = "uploads/";
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                Path filePath = uploadPath.resolve(filename);
+                Files.copy(image.getInputStream(), filePath);
+                member.setImageUrl("/uploads/" + filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+                member.setImageUrl("");
             }
-            String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(image.getInputStream(), filePath);
-            member.setImageUrl("/uploads/" + filename);
         } else {
             member.setImageUrl("");
         }

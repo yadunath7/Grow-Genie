@@ -11,6 +11,7 @@ public class TeamMember {
     private String position;
     private String imageUrl;
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String linkedinUrl;
     private LocalDateTime createdAt;

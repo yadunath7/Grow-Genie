@@ -10,6 +10,7 @@ public class PlatformProduct {
     private String name;
     private Double price;
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String rateType;
     private String duration;
