@@ -50,6 +50,9 @@ public class AdminController {
     @Autowired
     private com.growgenie.app.service.SettingsService settingsService;
 
+    @Autowired
+    private com.growgenie.app.repository.LoginHistoryRepository loginHistoryRepository;
+
     private boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null && Boolean.TRUE.equals(session.getAttribute("admin_logged_in"))) {
@@ -100,6 +103,17 @@ public class AdminController {
         if (!isAdmin(request)) return "redirect:/login";
         userRepository.deleteById(id);
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/users/logins")
+    public String userLogins(HttpServletRequest request, @RequestParam Long id, Model model) {
+        if (!isAdmin(request)) return "redirect:/login";
+        com.growgenie.app.entity.User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("histories", loginHistoryRepository.findByUserIdOrderByLoginTimeDesc(id));
+        }
+        return "admin/user_logins";
     }
 
     @GetMapping("/subscriptions")

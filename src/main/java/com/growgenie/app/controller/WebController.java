@@ -47,6 +47,18 @@ public class WebController {
         
         model.addAttribute("landing_hero_title", settingsService.getSetting("landing_hero_title", "Navigating the startup landscape for success"));
         model.addAttribute("landing_hero_subtitle", settingsService.getSetting("landing_hero_subtitle", "Our startup assistant helps founders grow and succeed through a range of tools including Genie roadmaps, marketing strategies, and invoice creation."));
+
+        // Contact info
+        model.addAttribute("contact_email", settingsService.getSetting("contact_email", null));
+        model.addAttribute("contact_phone", settingsService.getSetting("contact_phone", null));
+        model.addAttribute("contact_address", settingsService.getSetting("contact_address", null));
+
+        // Social media
+        model.addAttribute("social_linkedin", settingsService.getSetting("social_linkedin", null));
+        model.addAttribute("social_twitter", settingsService.getSetting("social_twitter", null));
+        model.addAttribute("social_facebook", settingsService.getSetting("social_facebook", null));
+        model.addAttribute("social_instagram", settingsService.getSetting("social_instagram", null));
+
         return "index";
     }
 

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login History | Admin | GrowGenie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
+</head>
+<body class="bg-white text-dark-black min-h-screen flex">
+
+    <!-- Admin Sidebar -->
+    <div class="w-64 h-screen sidebar fixed top-0 left-0 flex flex-col p-6 border-r-2 border-dark-black bg-white">
+        <div class="flex items-center mb-12">
+            <svg class="w-8 h-8 mr-2" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="var(--lime-green)"/>
+                <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="var(--dark-black)"/>
+            </svg>
+            <h1 class="text-2xl font-black uppercase tracking-tighter">Admin</h1>
+        </div>
+        <nav class="flex-1 space-y-2">
+            <a href="dashboard" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Dashboard</span></a>
+            <a href="users" class="nav-item active flex items-center p-4 font-bold text-lg bg-lime-green border-2 border-dark-black rounded-2xl shadow-[4px_4px_0_var(--dark-black)]"><span>Users</span></a>
+            <a href="subscriptions" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Subscriptions</span></a>
+            <a href="platform_products" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Products</span></a>
+            <a href="testimonials" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Testimonials</span></a>
+            <a href="team" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Team</span></a>
+            <a href="settings" class="nav-item flex items-center p-4 font-bold text-lg hover:bg-light-gray transition-all"><span>Settings</span></a>
+        </nav>
+        <div class="mt-auto">
+            <a href="logout" class="flex items-center p-4 font-bold text-lg text-red-600 hover:bg-red-50 rounded-2xl transition-all"><span>Logout</span></a>
+        </div>
+    </div>
+
+    <main class="flex-1 ml-64 p-8 md:p-12">
+        <header class="flex justify-between items-center mb-12">
+            <div>
+                <a href="/admin/users" class="inline-flex items-center gap-2 text-gray-500 hover:text-dark-black font-bold uppercase tracking-wider text-sm mb-4 transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Back to Users
+                </a>
+                <h2 class="text-5xl font-black uppercase">Login History</h2>
+                <p class="text-xl text-gray-600 font-medium mt-2">
+                    Showing all login sessions for
+                    <span class="text-dark-black font-black" th:text="${user != null ? user.name : 'Unknown User'}">User Name</span>
+                    <span class="text-gray-400 font-medium text-base" th:text="${user != null ? ('(' + user.email + ')') : ''}"></span>
+                </p>
+            </div>
+        </header>
+
+        <!-- No histories message -->
+        <div th:if="${histories == null or #lists.isEmpty(histories)}" class="card-positivus text-center py-20">
+            <div class="text-6xl mb-4">🔒</div>
+            <p class="text-2xl font-black uppercase">No Login Records Found</p>
+            <p class="text-gray-500 font-medium mt-2">This user hasn't logged in yet or history was not captured.</p>
+        </div>
+
+        <!-- Login history table -->
+        <div th:if="${histories != null and not #lists.isEmpty(histories)}" class="card-positivus overflow-hidden !p-0">
+            <table class="w-full text-left">
+                <thead class="bg-dark-black text-white">
+                    <tr>
+                        <th class="p-5 font-black uppercase text-sm">Date &amp; Time</th>
+                        <th class="p-5 font-black uppercase text-sm">IP Address</th>
+                        <th class="p-5 font-black uppercase text-sm">Location</th>
+                        <th class="p-5 font-black uppercase text-sm">Browser</th>
+                        <th class="p-5 font-black uppercase text-sm">OS</th>
+                        <th class="p-5 font-black uppercase text-sm">Device</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y-2 divide-dark-black/5">
+                    <tr th:each="h : ${histories}" class="hover:bg-light-gray/30 transition-colors">
+                        <td class="p-5">
+                            <div class="font-bold text-sm" th:text="${#temporals.format(h.loginTime, 'dd MMM yyyy')}">Date</div>
+                            <div class="text-xs text-gray-500 font-medium" th:text="${#temporals.format(h.loginTime, 'HH:mm:ss')}">Time</div>
+                        </td>
+                        <td class="p-5">
+                            <span class="font-mono text-sm bg-dark-black/5 px-2 py-1 rounded-lg" th:text="${h.ipAddress ?: 'N/A'}">IP</span>
+                        </td>
+                        <td class="p-5">
+                            <div class="font-bold text-sm" th:text="${(h.city ?: '') + (h.city != null and h.state != null ? ', ' : '') + (h.state ?: '')}">City, State</div>
+                            <div class="text-xs text-gray-500 font-medium" th:text="${h.country ?: 'Unknown'}">Country</div>
+                        </td>
+                        <td class="p-5 font-medium text-sm" th:text="${h.browser ?: 'N/A'}">Browser</td>
+                        <td class="p-5 font-medium text-sm" th:text="${h.operatingSystem ?: 'N/A'}">OS</td>
+                        <td class="p-5">
+                            <span th:if="${h.deviceType != null}"
+                                  th:text="${h.deviceType}"
+                                  th:classappend="${h.deviceType == 'Desktop' ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'}"
+                                  class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">Device</span>
+                            <span th:if="${h.deviceType == null}" class="text-gray-400 text-sm">N/A</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary stats if data exists -->
+        <div th:if="${histories != null and not #lists.isEmpty(histories)}" class="grid grid-cols-3 gap-6 mt-8">
+            <div class="card-positivus text-center">
+                <p class="text-4xl font-black" th:text="${#lists.size(histories)}">0</p>
+                <p class="text-sm font-bold uppercase text-gray-500 mt-1">Total Logins</p>
+            </div>
+            <div class="card-positivus text-center">
+                <p class="text-xl font-black" th:text="${histories[0].country ?: 'N/A'}">Country</p>
+                <p class="text-sm font-bold uppercase text-gray-500 mt-1">Last Login Country</p>
+            </div>
+            <div class="card-positivus text-center">
+                <p class="text-xl font-black" th:text="${histories[0].browser ?: 'N/A'}">Browser</p>
+                <p class="text-sm font-bold uppercase text-gray-500 mt-1">Last Used Browser</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

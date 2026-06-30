@@ -74,6 +74,7 @@
                         <th class="p-6 font-black uppercase">Email</th>
                         <th class="p-6 font-black uppercase">Status</th>
                         <th class="p-6 font-black uppercase">Joined</th>
+                        <th class="p-6 font-black uppercase text-center">Login History</th>
                         <th class="p-6 font-black uppercase text-center">Actions</th>
                     </tr>
                 </thead>
@@ -97,6 +98,11 @@
                             </form>
                         </td>
                         <td class="p-6 font-medium text-gray-400 text-sm" th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}"></td>
+                        <td class="p-6 text-center">
+                            <a th:href="@{/admin/users/logins(id=${user.id})}" class="bg-dark-black text-white px-4 py-2 rounded-xl font-bold hover:bg-lime-green hover:text-dark-black transition-all text-xs uppercase tracking-wider">
+                                View Logins
+                            </a>
+                        </td>
                         <td class="p-6 text-center">
                             <a th:href="@{/admin/users/delete(id=${user.id})}" onclick="return confirm('Delete this user?')" class="bg-red-100 text-red-600 px-4 py-2 rounded-xl font-bold hover:bg-red-600 hover:text-white transition-all text-xs uppercase tracking-wider">
                                 Delete

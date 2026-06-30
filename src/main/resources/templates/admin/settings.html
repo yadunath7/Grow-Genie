@@ -153,6 +153,42 @@
                 </div>
             </div>
 
+            <!-- Contact & Social Media -->
+            <div class="card-positivus">
+                <h3 class="text-2xl font-black uppercase mb-6">Contact &amp; Social Media</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Contact Email</label>
+                        <input type="email" name="contact_email" th:value="${settings['contact_email']}" placeholder="info@growgenie.com" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Contact Phone</label>
+                        <input type="text" name="contact_phone" th:value="${settings['contact_phone']}" placeholder="+91 98765 43210" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Contact Address</label>
+                        <textarea name="contact_address" placeholder="404 Innovation Park, Startup Hub, Bengaluru..." class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-medium focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all h-24" th:text="${settings['contact_address']}"></textarea>
+                    </div>
+                    <hr class="border-dark-black/10">
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">LinkedIn URL</label>
+                        <input type="url" name="social_linkedin" th:value="${settings['social_linkedin']}" placeholder="https://linkedin.com/company/growgenie" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-mono text-sm focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Twitter / X URL</label>
+                        <input type="url" name="social_twitter" th:value="${settings['social_twitter']}" placeholder="https://twitter.com/growgenie" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-mono text-sm focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Facebook URL</label>
+                        <input type="url" name="social_facebook" th:value="${settings['social_facebook']}" placeholder="https://facebook.com/growgenie" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-mono text-sm focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Instagram URL</label>
+                        <input type="url" name="social_instagram" th:value="${settings['social_instagram']}" placeholder="https://instagram.com/growgenie" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-mono text-sm focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" class="btn-positivus w-full py-6 text-2xl">SAVE ALL SETTINGS</button>
         </form>
     </main>
