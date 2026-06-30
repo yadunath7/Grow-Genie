@@ -62,8 +62,8 @@
                     <p class="text-6xl font-bold text-lime-green drop-shadow-[2px_2px_0_var(--dark-black)]">10+</p>
                     <p class="text-xl font-bold mt-4">Years Experience</p>
                 </div>
-                <div class="card-positivus text-center bg-dark-black text-white">
-                    <p class="text-6xl font-bold text-lime-green drop-shadow-[2px_2px_0_#ffffff]">500+</p>
+                <div class="card-positivus text-center bg-[var(--dark-black)] text-white">
+                    <p class="text-6xl font-bold text-[var(--lime-green)] drop-shadow-[2px_2px_0_#ffffff]">500+</p>
                     <p class="text-xl font-bold mt-4">Startups Launched</p>
                 </div>
                 <div class="card-positivus text-center">
@@ -131,52 +131,21 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Team Member 1 -->
-                <div class="team-card">
+                <div th:each="member : ${team_members}" class="team-card">
                     <div class="flex items-center mb-6 border-b border-dark-black pb-6">
                         <div class="team-image-wrapper mr-4">
                             <div class="team-shape"></div>
-                            <img src="https://i.pravatar.cc/150?img=11" alt="John Smith" class="team-image">
+                            <img th:src="${member.imageUrl}" th:alt="${member.name}" class="team-image">
                         </div>
                         <div>
-                            <h4 class="text-xl font-bold">John Smith</h4>
-                            <p class="text-sm">CEO and Founder</p>
+                            <h4 class="text-xl font-bold" th:text="${member.name}">John Smith</h4>
+                            <p class="text-sm" th:text="${member.position}">CEO and Founder</p>
                         </div>
-                        <a href="#" class="linkedin-icon"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                        <a th:href="${member.linkedinUrl}" target="_blank" class="linkedin-icon" th:if="${member.linkedinUrl != null && !member.linkedinUrl.isEmpty()}">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
                     </div>
-                    <p class="text-sm">10+ years of experience in digital marketing. Expertise in SEO, PPC, and content strategy.</p>
-                </div>
-
-                <!-- Team Member 2 -->
-                <div class="team-card">
-                    <div class="flex items-center mb-6 border-b border-dark-black pb-6">
-                        <div class="team-image-wrapper mr-4">
-                            <div class="team-shape"></div>
-                            <img src="https://i.pravatar.cc/150?img=47" alt="Jane Doe" class="team-image">
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold">Jane Doe</h4>
-                            <p class="text-sm">Director of Operations</p>
-                        </div>
-                        <a href="#" class="linkedin-icon"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-                    </div>
-                    <p class="text-sm">7+ years of experience in project management and team leadership. Strong organizational skills.</p>
-                </div>
-
-                <!-- Team Member 3 -->
-                <div class="team-card">
-                    <div class="flex items-center mb-6 border-b border-dark-black pb-6">
-                        <div class="team-image-wrapper mr-4">
-                            <div class="team-shape"></div>
-                            <img src="https://i.pravatar.cc/150?img=12" alt="Michael Brown" class="team-image">
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold">Michael Brown</h4>
-                            <p class="text-sm">SEO Specialist</p>
-                        </div>
-                        <a href="#" class="linkedin-icon"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-                    </div>
-                    <p class="text-sm">5+ years of experience in SEO and content creation. Proficient in keyword research.</p>
+                    <p class="text-sm" th:text="${member.description}">10+ years of experience in digital marketing...</p>
                 </div>
             </div>
         </section>

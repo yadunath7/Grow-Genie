@@ -41,6 +41,9 @@ public class SettingsService {
     }
 
     public void updateSetting(String key, String value) {
+        if (value == null) {
+            value = "";
+        }
         Setting setting = settingRepository.findById(key).orElse(new Setting());
         setting.setSettingKey(key);
         setting.setSettingValue(value);

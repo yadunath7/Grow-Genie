@@ -66,6 +66,7 @@ public class WebController {
     public String about(Model model) {
         model.addAttribute("about_title", settingsService.getSetting("about_title", "We are the architects of startup success"));
         model.addAttribute("about_content", settingsService.getSetting("about_content", "GrowGenie was founded on a simple belief: every great idea deserves the right tools to succeed. We bridge the gap between innovation and execution."));
+        model.addAttribute("team_members", teamMemberRepository.findAll());
         return "about";
     }
 
