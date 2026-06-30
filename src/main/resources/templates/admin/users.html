@@ -99,8 +99,9 @@
                         </td>
                         <td class="p-6 font-medium text-gray-400 text-sm" th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}"></td>
                         <td class="p-6 text-center">
-                            <a th:href="@{/admin/users/logins(id=${user.id})}" class="bg-dark-black text-white px-4 py-2 rounded-xl font-bold hover:bg-lime-green hover:text-dark-black transition-all text-xs uppercase tracking-wider">
-                                View Logins
+                            <a th:href="@{/admin/users/logins(id=${user.id})}"
+                               class="inline-block bg-[var(--lime-green)] text-[var(--dark-black)] border-2 border-[var(--dark-black)] shadow-[3px_3px_0_var(--dark-black)] px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all">
+                                🔒 Logins
                             </a>
                         </td>
                         <td class="p-6 text-center">
