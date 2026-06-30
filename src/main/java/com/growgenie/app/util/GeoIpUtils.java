@@ -23,7 +23,7 @@ public class GeoIpUtils {
         try {
             InputStream database = new ClassPathResource("GeoLite2-City.mmdb").getInputStream();
             dbReader = new DatabaseReader.Builder(database).build();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             System.err.println("Failed to load GeoLite2-City database: " + e.getMessage());
         }
     }

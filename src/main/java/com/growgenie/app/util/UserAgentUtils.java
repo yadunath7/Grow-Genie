@@ -10,7 +10,13 @@ public class UserAgentUtils {
     private final Parser parser;
 
     public UserAgentUtils() {
-        this.parser = new Parser();
+        Parser p = null;
+        try {
+            p = new Parser();
+        } catch (Throwable t) {
+            System.err.println("Failed to initialize UserAgent parser: " + t.getMessage());
+        }
+        this.parser = p;
     }
 
     public DeviceDTO parseUserAgent(String userAgentString) {
@@ -20,6 +26,7 @@ public class UserAgentUtils {
         }
 
         try {
+            if (parser == null) return deviceDTO;
             Client client = parser.parse(userAgentString);
             
             // Browser
