@@ -207,15 +207,6 @@ function getSidebarHTML(activePage) {
                         <option value="en" ${currentLang === 'en' ? 'selected' : ''}>English 🇺🇸</option>
                         <option value="hi" ${currentLang === 'hi' ? 'selected' : ''}>हिन्दी 🇮🇳</option>
                         <option value="ta" ${currentLang === 'ta' ? 'selected' : ''}>தமிழ் 🇮🇳</option>
-                        <option value="bn" ${currentLang === 'bn' ? 'selected' : ''}>বাংলা 🇮🇳</option>
-                        <option value="te" ${currentLang === 'te' ? 'selected' : ''}>తెలుగు 🇮🇳</option>
-                        <option value="mr" ${currentLang === 'mr' ? 'selected' : ''}>मराठी 🇮🇳</option>
-                        <option value="gu" ${currentLang === 'gu' ? 'selected' : ''}>ગુજરાતી 🇮🇳</option>
-                        <option value="kn" ${currentLang === 'kn' ? 'selected' : ''}>ಕನ್ನಡ 🇮🇳</option>
-                        <option value="ml" ${currentLang === 'ml' ? 'selected' : ''}>മലയാളം 🇮🇳</option>
-                        <option value="pa" ${currentLang === 'pa' ? 'selected' : ''}>ਪੰਜਾਬੀ 🇮🇳</option>
-                        <option value="es" ${currentLang === 'es' ? 'selected' : ''}>Español 🇪🇸</option>
-                        <option value="fr" ${currentLang === 'fr' ? 'selected' : ''}>Français 🇫🇷</option>
                     </select>
                 </div>
 
