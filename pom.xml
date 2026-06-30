@@ -67,6 +67,20 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- MaxMind GeoIP2 API -->
+		<dependency>
+			<groupId>com.maxmind.geoip2</groupId>
+			<artifactId>geoip2</artifactId>
+			<version>4.2.0</version>
+		</dependency>
+
+		<!-- User-Agent Parser -->
+		<dependency>
+			<groupId>com.github.ua-parser</groupId>
+			<artifactId>uap-java</artifactId>
+			<version>1.5.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

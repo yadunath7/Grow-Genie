@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login History | GrowGenie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style th:if="${theme_primary != null}">
+        :root {
+            --lime-green: [[${theme_primary}]];
+            --dark-black: [[${theme_secondary}]];
+        }
+    </style>
+</head>
+<body class="bg-white text-dark-black min-h-screen flex">
+
+    <div id="sidebar-container"></div>
+
+    <main class="flex-1 ml-64 p-8 md:p-12 min-h-screen relative overflow-x-hidden transition-all duration-300">
+        <header class="flex justify-between items-center mb-12">
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="sidebar-toggle bg-white border-dark-black text-dark-black mr-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <div>
+                    <h2 class="text-5xl font-bold mb-2">Login History</h2>
+                    <p class="text-xl text-gray-600 font-medium">Review your recent account activity and login locations</p>
+                </div>
+            </div>
+            <div>
+                <a href="/profile" class="btn-positivus bg-white border-2 border-dark-black shadow-[4px_4px_0_var(--dark-black)] hover:bg-light-gray transition-all">Back to Profile</a>
+            </div>
+        </header>
+
+        <div class="card-positivus bg-white border-2 border-dark-black shadow-[8px_8px_0_var(--dark-black)]">
+            <h3 class="text-3xl font-black uppercase mb-8">Security Log</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="border-b-2 border-dark-black text-left bg-light-gray">
+                            <th class="py-4 px-4 font-bold text-dark-black uppercase tracking-widest text-xs">Location</th>
+                            <th class="py-4 px-4 font-bold text-dark-black uppercase tracking-widest text-xs">IP Address</th>
+                            <th class="py-4 px-4 font-bold text-dark-black uppercase tracking-widest text-xs">Device Info</th>
+                            <th class="py-4 px-4 font-bold text-dark-black uppercase tracking-widest text-xs">Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="log : ${loginHistory}" class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="py-5 px-4 font-bold text-dark-black">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🗺️</span>
+                                    <div>
+                                        <p th:text="${log.city != null ? log.city + ', ' + (log.state != null ? log.state : '') : 'Unknown City'}"></p>
+                                        <p class="text-sm text-gray-500 font-medium" th:text="${log.country != null ? log.country : 'Unknown Country'}"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-5 px-4 text-gray-600 font-mono text-sm">
+                                <span th:text="${log.ipAddress}"></span>
+                            </td>
+                            <td class="py-5 px-4 text-gray-600 font-medium">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-dark-black" th:text="${log.browser != null ? log.browser : 'Unknown Browser'}"></span>
+                                    <span class="text-sm" th:text="${log.operatingSystem != null ? log.operatingSystem : 'Unknown OS'} + ' • ' + ${log.deviceType != null ? log.deviceType : 'Unknown Device'}"></span>
+                                </div>
+                            </td>
+                            <td class="py-5 px-4 font-medium text-dark-black">
+                                <span th:text="${#temporals.format(log.loginTime, 'dd MMM yyyy, HH:mm')}"></span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(loginHistory)}">
+                            <td colspan="4" class="py-16 text-center">
+                                <div class="text-6xl mb-4">🛡️</div>
+                                <h4 class="text-2xl font-bold text-gray-400 mb-2">No Login History</h4>
+                                <p class="text-gray-500 font-medium">Your login activity will appear here.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../assets/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            renderSidebar('profile'); 
+            await checkAuth();
+        });
+    </script>
+</body>
+</html>

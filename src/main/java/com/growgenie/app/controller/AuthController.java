@@ -26,6 +26,9 @@ public class AuthController {
     @Autowired
     private com.growgenie.app.service.SettingsService settingsService;
 
+    @Autowired
+    private com.growgenie.app.service.LoginHistoryService loginHistoryService;
+
     @RequestMapping(value = "/auth", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, Object> authHandler(
             @RequestParam(required = false) String action,
@@ -102,6 +105,11 @@ public class AuthController {
                 response.put("status", "success");
                 response.put("message", "Login successful.");
                 response.put("is_admin", isAdmin);
+
+                // Record login history asynchronously to avoid slowing down login
+                new Thread(() -> {
+                    loginHistoryService.recordLogin(user.getId(), request);
+                }).start();
             } else {
                 response.put("status", "error");
                 response.put("message", "Invalid email or password.");
