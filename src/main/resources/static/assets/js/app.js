@@ -135,7 +135,7 @@ async function logout() {
         },
         body: 'action=logout'
     });
-    window.location.href = 'index';
+    window.location.href = '/';
 }
 
 function toggleSidebar() {

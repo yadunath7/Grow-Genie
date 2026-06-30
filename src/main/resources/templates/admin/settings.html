@@ -67,6 +67,29 @@
                 </div>
             </div>
 
+            <!-- Content Management -->
+            <div class="card-positivus">
+                <h3 class="text-2xl font-black uppercase mb-6">Content Management</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Landing Page Hero Title</label>
+                        <input type="text" name="landing_hero_title" th:value="${settings['landing_hero_title']}" placeholder="Navigating the startup landscape for success" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">Landing Page Subtitle</label>
+                        <textarea name="landing_hero_subtitle" placeholder="Our startup assistant helps founders..." class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-medium focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all h-24" th:text="${settings['landing_hero_subtitle']}"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">About Us Title</label>
+                        <input type="text" name="about_title" th:value="${settings['about_title']}" placeholder="We are the architects of startup success" class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-bold focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-black uppercase mb-2">About Us Content</label>
+                        <textarea name="about_content" placeholder="GrowGenie was founded on a simple belief..." class="w-full bg-white border-2 border-dark-black rounded-2xl px-6 py-4 font-medium focus:shadow-[6px_6px_0_var(--lime-green)] focus:outline-none transition-all h-32" th:text="${settings['about_content']}"></textarea>
+                    </div>
+                </div>
+            </div>
+
             <!-- API Keys -->
             <div class="card-positivus">
                 <h3 class="text-2xl font-black uppercase mb-6">API & Credentials</h3>
