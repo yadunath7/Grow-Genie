@@ -37,7 +37,7 @@ public class GroqService {
         headers.setBearerAuth(apiKey);
 
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", "llama-3.3-70b-versatile");
+       requestBody.put("model", "openai/gpt-oss-120b");
         requestBody.put("temperature", 0.7);
 
         if (jsonMode) {
